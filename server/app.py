@@ -77,6 +77,14 @@ class TournamentLaunchMatchRequest(BaseModel):
 class TournamentImportRequest(BaseModel):
     tournament_data: Dict[str, Any]
 
+class RolloutSimRequest(BaseModel):
+    red_skill_file: Optional[str] = None
+    blue_skill_file: Optional[str] = None
+    red_skill_content: Optional[str] = None
+    blue_skill_content: Optional[str] = None
+    num_simulations: int = 10
+    max_duration_seconds: int = DEFAULT_MATCH_DURATION_SECONDS
+
 
 # REST Endpoints
 @app.get("/api/cards")
@@ -277,6 +285,64 @@ async def import_tournament(req: TournamentImportRequest):
     orchestrator.tournament.import_from_dict(req.tournament_data)
     await orchestrator.broadcast_state()
     return {"status": "tournament_imported", "tournament": orchestrator.tournament.to_dict()}
+
+@app.post("/api/simulate_rollout")
+def simulate_rollout(req: RolloutSimRequest):
+    """Fast-forward Monte Carlo simulator for AI deck evaluation & strategy testing."""
+    if req.red_skill_content and req.blue_skill_content:
+        red_profile = parse_kingdom_skill(req.red_skill_content)
+        blue_profile = parse_kingdom_skill(req.blue_skill_content)
+    else:
+        red_path = os.path.join("skills", os.path.basename(req.red_skill_file or "hog_cycle.md"))
+        blue_path = os.path.join("skills", os.path.basename(req.blue_skill_file or "giant_beatdown.md"))
+        if not os.path.exists(red_path) or not os.path.exists(blue_path):
+            raise HTTPException(status_code=400, detail="Skill files not found for rollout simulation")
+        red_profile = load_kingdom_skill_file(red_path)
+        blue_profile = load_kingdom_skill_file(blue_path)
+
+    from engine.battle_simulator import ClashBattleSimulator
+    from engine.game_state import ClashGameState
+
+    num_sims = max(1, min(100, req.num_simulations))
+    results = {"num_simulations": num_sims, "red_wins": 0, "blue_wins": 0, "draws": 0, "total_duration": 0.0, "matches": []}
+
+    for i in range(num_sims):
+        sim_state = ClashGameState(max_duration_seconds=req.max_duration_seconds)
+        sim_state.players["red"].name = red_profile.name
+        sim_state.players["red"].deck = red_profile.deck
+        sim_state.players["blue"].name = blue_profile.name
+        sim_state.players["blue"].deck = blue_profile.deck
+
+        simulator = ClashBattleSimulator(sim_state)
+        sim_state.status = "running"
+
+        while sim_state.status == "running" and sim_state.elapsed_seconds < req.max_duration_seconds:
+            red_card = red_profile.deck[sim_state.round_number % len(red_profile.deck)] if red_profile.deck else "knight"
+            blue_card = blue_profile.deck[sim_state.round_number % len(blue_profile.deck)] if blue_profile.deck else "archers"
+            red_order = {"card": red_card, "lane": red_profile.preferred_lane}
+            blue_order = {"card": blue_card, "lane": blue_profile.preferred_lane}
+            simulator.execute_round(red_order, blue_order, round_delta_seconds=1.0)
+
+        winner = sim_state.winner
+        if winner == "red":
+            results["red_wins"] += 1
+        elif winner == "blue":
+            results["blue_wins"] += 1
+        else:
+            results["draws"] += 1
+        results["total_duration"] += sim_state.elapsed_seconds
+        results["matches"].append({
+            "sim_id": i + 1,
+            "winner": winner,
+            "elapsed_seconds": sim_state.elapsed_seconds,
+            "red_crowns": sim_state.players["red"].crowns,
+            "blue_crowns": sim_state.players["blue"].crowns
+        })
+
+    results["avg_duration_seconds"] = round(results["total_duration"] / num_sims, 2)
+    results["win_rate_red"] = round(results["red_wins"] / num_sims, 2)
+    results["win_rate_blue"] = round(results["blue_wins"] / num_sims, 2)
+    return results
 
 # WebSocket Endpoint
 @app.websocket("/ws/arena")

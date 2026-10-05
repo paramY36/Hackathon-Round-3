@@ -24,16 +24,16 @@ let lastProcessedRound = -1;
 
 // Card Catalog Definition for Client
 const CARD_PROTOS = {
-  knight: { name: 'Knight', elixir: 3, icon: '🗡️', type: 'Melee Brawler', hp: 850, dmg: 95, desc: 'Tough frontline melee fighter. Solid damage and excellent counter-push potential.' },
-  archers: { name: 'Archers', elixir: 3, icon: '🏹', type: 'Sharpshooter Pair', hp: 280, dmg: 55, desc: 'Pair of sharpshooters. Snipes ground and air threats from safe distance.' },
-  giant: { name: 'Giant', elixir: 5, icon: '🗿', type: 'Siege Tank', hp: 2200, dmg: 110, desc: 'Colossal siege tank that marches straight for enemy towers, ignoring distractions.' },
-  musketeer: { name: 'Musketeer', elixir: 4, icon: '🔫', type: 'Precision Sniper', hp: 420, dmg: 120, desc: 'Long-range boomstick specialist. Shreds incoming tanks from behind friendly lines.' },
-  hog_rider: { name: 'Hog Rider', elixir: 4, icon: '🐗', type: 'Tower Rusher', hp: 750, dmg: 120, desc: 'Fast hammer-wielding tower rusher. Jumps the bridge and chips the crown tower!' },
-  skeletons: { name: 'Skeleton Army', elixir: 2, icon: '💀', type: 'Distraction Swarm', hp: 65, dmg: 50, desc: 'Bony distraction swarm. Overwhelms single-target tanks like the Giant and Knight.' },
-  baby_dragon: { name: 'Baby Dragon', elixir: 4, icon: '🐲', type: 'Air Splash', hp: 800, dmg: 85, desc: 'Flying splash-damage dragon. Spits fireballs that vaporize swarms.' },
-  pekka: { name: 'P.E.K.K.A', elixir: 7, icon: '🤖', type: 'Heavy Armor Titan', hp: 2600, dmg: 420, desc: 'Heavily armored mechanical beast. Obliterates tanks with catastrophic sword strikes.' },
-  fireball: { name: 'Fireball', elixir: 4, icon: '🔥', type: 'Direct Spell', hp: '-', dmg: 360, desc: 'Direct spell blast. Incinerates enemy troop clusters or finishes off damaged towers.' },
-  goblin_barrel: { name: 'Goblin Barrel', elixir: 3, icon: '🪵', type: 'Tower Flank Spell', hp: 100, dmg: 60, desc: 'Direct tower assault. Launches 3 dagger goblins right onto the enemy Princess Tower!' }
+  knight: { name: 'Knight', elixir: 3, icon: '🗡️', type: 'Melee Brawler', rarity: 'common', category: 'troop', hp: 850, dmg: 95, speedStr: 'Medium (8.0 tiles/s)', targetStr: 'Ground & Air (Nearest)', desc: 'Tough frontline melee fighter. Solid damage and excellent counter-push potential.', synergies: 'Archers, Musketeer', counters: 'Giant, Hog Rider' },
+  archers: { name: 'Archers', elixir: 3, icon: '🏹', type: 'Sharpshooter Pair', rarity: 'common', category: 'swarm', hp: 280, dmg: 55, speedStr: 'Medium (8.0 tiles/s)', targetStr: 'Ground & Air (Nearest)', desc: 'Pair of sharpshooters. Snipes ground and air threats from safe distance.', synergies: 'Knight, Giant', counters: 'P.E.K.K.A, Baby Dragon' },
+  giant: { name: 'Giant', elixir: 5, icon: '🗿', type: 'Siege Tank', rarity: 'rare', category: 'tank', hp: 2200, dmg: 110, speedStr: 'Slow (5.0 tiles/s)', targetStr: 'Buildings Only', desc: 'Colossal siege tank that marches straight for enemy towers, ignoring distractions.', synergies: 'Musketeer, Baby Dragon', counters: 'Princess Towers' },
+  musketeer: { name: 'Musketeer', elixir: 4, icon: '🔫', type: 'Precision Sniper', rarity: 'rare', category: 'troop', hp: 420, dmg: 120, speedStr: 'Medium (7.5 tiles/s)', targetStr: 'Ground & Air (Nearest)', desc: 'Long-range boomstick specialist. Shreds incoming tanks from behind friendly lines.', synergies: 'Giant, Pekka', counters: 'Baby Dragon, Hog Rider' },
+  hog_rider: { name: 'Hog Rider', elixir: 4, icon: '🐗', type: 'Tower Rusher', rarity: 'rare', category: 'troop', hp: 750, dmg: 120, speedStr: 'Very Fast (13.0 tiles/s)', targetStr: 'Buildings Only', desc: 'Fast hammer-wielding tower rusher. Charges the bridge and chips the crown tower!', synergies: 'Goblin Barrel, Fireball', counters: 'Crown Towers' },
+  skeletons: { name: 'Skeleton Army', elixir: 2, icon: '💀', type: 'Distraction Swarm', rarity: 'epic', category: 'swarm', hp: 65, dmg: 50, speedStr: 'Fast (11.0 tiles/s)', targetStr: 'Ground & Air (Nearest)', desc: 'Bony distraction swarm. Overwhelms single-target tanks like the Giant and Knight.', synergies: 'Hog Rider, Pekka', counters: 'P.E.K.K.A, Giant, Hog Rider' },
+  baby_dragon: { name: 'Baby Dragon', elixir: 4, icon: '🐲', type: 'Air Splash', rarity: 'epic', category: 'air', hp: 800, dmg: 85, speedStr: 'Fast (9.5 tiles/s)', targetStr: 'Ground & Air (Splash)', desc: 'Flying splash-damage dragon. Spits fireballs that vaporize swarms.', synergies: 'P.E.K.K.A, Giant', counters: 'Skeleton Army, Archers' },
+  pekka: { name: 'P.E.K.K.A', elixir: 7, icon: '🤖', type: 'Heavy Armor Titan', rarity: 'legendary', category: 'tank', hp: 2600, dmg: 420, speedStr: 'Slow (4.5 tiles/s)', targetStr: 'Ground & Air (Nearest)', desc: 'Heavily armored mechanical beast. Obliterates tanks with catastrophic sword strikes.', synergies: 'Baby Dragon, Musketeer', counters: 'Giant, Hog Rider, Knight' },
+  fireball: { name: 'Fireball', elixir: 4, icon: '🔥', type: 'Direct Spell', rarity: 'rare', category: 'spell', hp: '-', dmg: 360, speedStr: 'Instant Spell', targetStr: 'Area Splash Radius 15', desc: 'Direct spell blast. Incinerates enemy troop clusters or finishes off damaged towers.', synergies: 'Hog Rider, Goblin Barrel', counters: 'Clustered Swarms & Support' },
+  goblin_barrel: { name: 'Goblin Barrel', elixir: 3, icon: '🪵', type: 'Tower Flank Spell', rarity: 'epic', category: 'spell', hp: 100, dmg: 60, speedStr: 'Fast Flying (11.0 tiles/s)', targetStr: 'Ground & Air (Nearest)', desc: 'Direct tower assault. Launches 3 dagger goblins right onto the enemy Princess Tower!', synergies: 'Hog Rider, Skeleton Army', counters: 'Crown Towers' }
 };
 
 // ==============================================================
@@ -61,13 +61,22 @@ function setMasterVolume(val) {
   }
 }
 
-function playClashSound(type) {
+function playClashSound(type, panX = 50) {
   if (!soundEnabled) return;
   try {
     initAudio();
     if (!audioCtx || !masterGain) return;
 
     const now = audioCtx.currentTime;
+    let targetBus = masterGain;
+
+    if (audioCtx.createStereoPanner) {
+      const panner = audioCtx.createStereoPanner();
+      const panVal = Math.max(-1.0, Math.min(1.0, (panX - 50.0) / 50.0));
+      panner.pan.setValueAtTime(panVal, now);
+      panner.connect(masterGain);
+      targetBus = panner;
+    }
 
     // 1. Sword Melee Clash
     if (type === 'sword') {
@@ -81,7 +90,7 @@ function playClashSound(type) {
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
 
       osc.connect(gain);
-      gain.connect(masterGain);
+      gain.connect(targetBus);
       osc.start(now);
       osc.stop(now + 0.12);
 
@@ -514,6 +523,51 @@ function connectWebSocket() {
   };
 }
 
+function renderElixirPips(containerId, elixirVal) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const pipsCount = Math.min(10, Math.max(0, Math.floor(elixirVal || 0)));
+  let html = '';
+  for (let i = 1; i <= 10; i++) {
+    html += `<span class="pip ${i <= pipsCount ? 'active' : ''}"></span>`;
+  }
+  container.innerHTML = html;
+}
+
+function updateDebugPanel(state) {
+  const panel = document.getElementById('debugPanel');
+  if (!panel || panel.style.display === 'none') return;
+
+  setElText('debugTickRound', state.round_number || 0);
+  setElText('debugElapsedTime', `${(state.elapsed_seconds || 0).toFixed(1)}s`);
+  const troops = state.troops || state.units || [];
+  setElText('debugUnitCount', troops.length);
+  setElText('debugEngineStatus', (state.status || 'STANDBY').toUpperCase());
+
+  const tbody = document.getElementById('debugTroopsTbody');
+  if (tbody) {
+    if (troops.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-muted">No active units deployed.</td></tr>';
+    } else {
+      tbody.innerHTML = troops.map(t => `
+        <tr class="${t.team === 'red' ? 'red-troop' : 'blue-troop'}">
+          <td><strong>${(t.team || '').toUpperCase()}</strong></td>
+          <td>${t.name || t.card_id}</td>
+          <td>${t.lane || 'mid'}</td>
+          <td>${Number(t.x || 0).toFixed(1)}</td>
+          <td>${Number(t.y || 0).toFixed(1)}</td>
+          <td>${t.hp}/${t.max_hp}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  const dump = document.getElementById('debugJsonDump');
+  if (dump) {
+    dump.textContent = JSON.stringify(state, null, 2);
+  }
+}
+
 function renderState(state) {
   currentMatchState = state;
 
@@ -530,12 +584,37 @@ function renderState(state) {
     elStatus.className = `match-status-badge ${state.status}`;
   }
 
+  // Esports Top HUD Matchup Names
+  setElText('hudRedName', (red.name || 'RED STRATEGY').toUpperCase());
+  setElText('hudBlueName', (blue.name || 'BLUE STRATEGY').toUpperCase());
+
+  // Esports Live Status Badge
+  const elLiveBadge = document.getElementById('hudLiveBadge');
+  const elLiveText = document.getElementById('hudLiveText');
+  if (elLiveText) {
+    if (state.status === 'running') {
+      elLiveText.textContent = state.is_overtime ? 'OVERTIME' : (state.is_double_elixir ? '2X ELIXIR' : 'LIVE MATCH');
+      if (elLiveBadge) elLiveBadge.className = 'hud-live-badge live';
+    } else if (state.status === 'paused') {
+      elLiveText.textContent = 'MATCH PAUSED';
+      if (elLiveBadge) elLiveBadge.className = 'hud-live-badge paused';
+    } else if (state.status === 'finished') {
+      elLiveText.textContent = 'MATCH CONCLUDED';
+      if (elLiveBadge) elLiveBadge.className = 'hud-live-badge finished';
+    } else {
+      elLiveText.textContent = 'STANDBY';
+      if (elLiveBadge) elLiveBadge.className = 'hud-live-badge standby';
+    }
+  }
+
   const elTimer = document.getElementById('matchTimer');
+  const remainingSeconds = Math.max(0, state.max_duration_seconds - state.elapsed_seconds);
+  const mins = Math.floor(remainingSeconds / 60).toString();
+  const secs = Math.floor(remainingSeconds % 60).toString().padStart(2, '0');
+  const timerStr = `${mins}:${secs}`;
+
   if (elTimer) {
-    const remainingSeconds = Math.max(0, state.max_duration_seconds - state.elapsed_seconds);
-    const mins = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
-    const secs = Math.floor(remainingSeconds % 60).toString().padStart(2, '0');
-    elTimer.textContent = `${mins}:${secs}`;
+    elTimer.textContent = `${mins.padStart(2, '0')}:${secs}`;
     if (remainingSeconds <= 30 && state.status === 'running') {
       elTimer.style.color = '#ef4444';
     } else {
@@ -543,9 +622,18 @@ function renderState(state) {
     }
   }
 
-  // 2. Crown Scoreboard
+  // Pitch Overlay Timer & Trainer Meta (Matching Reference Image)
+  setElText('pitchTimerText', timerStr);
+  setElText('pitchRedName', (red.name || 'TRAINER EARL').toUpperCase());
+  setElText('pitchRedSub', red.author || 'Royal Trainers');
+
+  // 2. Crown Scoreboard & Side Crowns
+  const elCrownScoreBadge = document.getElementById('crownScoreBadge');
   setElText('scoreRedCrowns', red.crowns || 0);
   setElText('scoreBlueCrowns', blue.crowns || 0);
+  setElText('sideCrownRedNum', red.crowns || 0);
+  setElText('sideCrownBlueNum', blue.crowns || 0);
+
   const elRedCrown = document.getElementById('redCrownDisplay');
   if (elRedCrown) {
     elRedCrown.innerHTML = `<i data-lucide="crown"></i> ${red.crowns || 0}`;
@@ -558,7 +646,62 @@ function renderState(state) {
     lucide.createIcons();
   }
 
-  // 3. Double Elixir Banner Pill
+  // 3. Dynamic Strategy Standing Pills
+  const redCrowns = red.crowns || 0;
+  const blueCrowns = blue.crowns || 0;
+  let redStatus = '● LIVE';
+  let blueStatus = '● LIVE';
+  let redStatusClass = 'status-live';
+  let blueStatusClass = 'status-live';
+
+  if (state.status === 'finished') {
+    if (state.winner === 'red') {
+      redStatus = '👑 WINNER'; redStatusClass = 'status-winning';
+      blueStatus = '💀 DEFEATED'; blueStatusClass = 'status-losing';
+    } else if (state.winner === 'blue') {
+      redStatus = '💀 DEFEATED'; redStatusClass = 'status-losing';
+      blueStatus = '👑 WINNER'; blueStatusClass = 'status-winning';
+    } else {
+      redStatus = '⚖️ DRAW'; blueStatus = '⚖️ DRAW';
+    }
+  } else if (state.status === 'running') {
+    if (redCrowns > blueCrowns) {
+      redStatus = '▲ ADVANTAGE'; redStatusClass = 'status-winning';
+      blueStatus = '▼ DEFENDING'; blueStatusClass = 'status-losing';
+    } else if (blueCrowns > redCrowns) {
+      redStatus = '▼ DEFENDING'; redStatusClass = 'status-losing';
+      blueStatus = '▲ ADVANTAGE'; blueStatusClass = 'status-winning';
+    } else {
+      const redHp = (red.towers?.king?.hp || 0) + (red.towers?.left_princess?.hp || 0) + (red.towers?.right_princess?.hp || 0);
+      const blueHp = (blue.towers?.king?.hp || 0) + (blue.towers?.left_princess?.hp || 0) + (blue.towers?.right_princess?.hp || 0);
+      if (redHp > blueHp + 200) {
+        redStatus = '▲ PRESSURE'; redStatusClass = 'status-winning';
+        blueStatus = '▼ REGROUPING'; blueStatusClass = 'status-losing';
+      } else if (blueHp > redHp + 200) {
+        redStatus = '▼ REGROUPING'; redStatusClass = 'status-losing';
+        blueStatus = '▲ PRESSURE'; blueStatusClass = 'status-winning';
+      } else {
+        redStatus = '● CONTESTED'; redStatusClass = 'status-live';
+        blueStatus = '● CONTESTED'; blueStatusClass = 'status-live';
+      }
+    }
+  }
+
+  const redStatusEl = document.getElementById('redStrategyStatus');
+  const redStatusText = document.getElementById('redStatusText');
+  if (redStatusEl && redStatusText) {
+    redStatusText.textContent = redStatus;
+    redStatusEl.className = `strategy-status-pill ${redStatusClass}`;
+  }
+
+  const blueStatusEl = document.getElementById('blueStrategyStatus');
+  const blueStatusText = document.getElementById('blueStatusText');
+  if (blueStatusEl && blueStatusText) {
+    blueStatusText.textContent = blueStatus;
+    blueStatusEl.className = `strategy-status-pill ${blueStatusClass}`;
+  }
+
+  // 4. Double Elixir Banner Pill
   const elDoublePill = document.getElementById('doubleElixirBadge');
   if (elDoublePill) {
     if (state.is_double_elixir) {
@@ -570,7 +713,7 @@ function renderState(state) {
     }
   }
 
-  // 4. Spectator Control Buttons
+  // 5. Spectator Control Buttons
   const btnStart = document.getElementById('btnStart');
   const btnPause = document.getElementById('btnPause');
   if (btnStart && btnPause) {
@@ -589,13 +732,16 @@ function renderState(state) {
     }
   }
 
-  // 5. Red Player Telemetry
+  // 6. Red Player Telemetry
   setElText('redName', red.name || 'Red Kingdom');
   setElText('redAuthor', red.author || 'Commander');
   setElText('redElixirNum', `${Number(red.elixir || 0).toFixed(1)} / 10`);
   const redElixirPct = Math.max(0, Math.min(100, ((red.elixir || 0) / 10.0) * 100));
   const elRedElixirBar = document.getElementById('redElixirBar');
   if (elRedElixirBar) elRedElixirBar.style.width = `${redElixirPct}%`;
+
+  // Render 10 Pips for Red
+  renderElixirPips('redElixirPips', red.elixir || 0);
 
   if (red.towers) {
     renderTowerEntity('red', 'king', red.towers.king);
@@ -615,13 +761,16 @@ function renderState(state) {
   setElText('redTaunt', red.last_taunt ? `"${red.last_taunt}"` : '');
   renderHandCards('red', red.deck || [], red.elixir || 0);
 
-  // 6. Blue Player Telemetry
+  // 7. Blue Player Telemetry
   setElText('blueName', blue.name || 'Blue Kingdom');
   setElText('blueAuthor', blue.author || 'Commander');
   setElText('blueElixirNum', `${Number(blue.elixir || 0).toFixed(1)} / 10`);
   const blueElixirPct = Math.max(0, Math.min(100, ((blue.elixir || 0) / 10.0) * 100));
   const elBlueElixirBar = document.getElementById('blueElixirBar');
   if (elBlueElixirBar) elBlueElixirBar.style.width = `${blueElixirPct}%`;
+
+  // Render 10 Pips for Blue
+  renderElixirPips('blueElixirPips', blue.elixir || 0);
 
   if (blue.towers) {
     renderTowerEntity('blue', 'king', blue.towers.king);
@@ -641,19 +790,42 @@ function renderState(state) {
   setElText('blueTaunt', blue.last_taunt ? `"${blue.last_taunt}"` : '');
   renderHandCards('blue', blue.deck || [], blue.elixir || 0);
 
-  // 7. Render Active Troops on Pitch
+  // 8. Derive Recent Action Tickers
+  const logs = state.combat_log || [];
+  let redLastAct = red.last_action || null;
+  let blueLastAct = blue.last_action || null;
+  if (!redLastAct || !blueLastAct) {
+    for (let i = logs.length - 1; i >= 0; i--) {
+      const entry = logs[i];
+      const text = entry.text || '';
+      if (!redLastAct && (text.includes(red.name || 'Red') || text.includes('North Bastion') || text.toLowerCase().includes('red'))) {
+        redLastAct = text;
+      }
+      if (!blueLastAct && (text.includes(blue.name || 'Blue') || text.includes('South Fortress') || text.toLowerCase().includes('blue'))) {
+        blueLastAct = text;
+      }
+      if (redLastAct && blueLastAct) break;
+    }
+  }
+  setElText('redLastActionText', redLastAct || 'Executing tactical doctrine');
+  setElText('blueLastActionText', blueLastAct || 'Executing tactical doctrine');
+
+  // 9. Render Active Troops on Pitch
   renderTroops(state.troops || state.units || []);
 
-  // 8. Process Simulation Combat & Particle Events
+  // 10. Process Simulation Combat & Particle Events
   if (state.events && state.round_number !== lastProcessedRound) {
     processCombatEvents(state.events);
     lastProcessedRound = state.round_number;
   }
 
-  // 9. Caster Combat Feed
+  // 11. Caster Combat Feed
   renderFeed(state.combat_log || []);
 
-  // 10. Match Header
+  // 12. Update Debug Inspector if active
+  updateDebugPanel(state);
+
+  // 13. Match Header
   const activeHeader = document.getElementById('arenaMatchHeader');
   if (activeHeader) {
     if (state.active_match_id) {
@@ -663,7 +835,7 @@ function renderState(state) {
     }
   }
 
-  // 11. Victory Modal
+  // 14. Victory Modal
   if (lastMatchStatus && lastMatchStatus !== 'finished' && state.status === 'finished' && state.winner && !victoryModalDismissed) {
     showVictoryModal(state);
   }
@@ -674,25 +846,26 @@ function processCombatEvents(events) {
   if (!events || !Array.isArray(events) || !fxEngine) return;
 
   events.forEach(ev => {
+    const eventX = ev.from_x !== undefined ? ev.from_x : (ev.x !== undefined ? ev.x : 50);
     if (ev.type === 'damage') {
       fxEngine.addDamageText(ev.x, ev.y, ev.amount, ev.is_crit);
     } else if (ev.type === 'projectile') {
       fxEngine.addProjectile(ev.kind, ev.from_x, ev.from_y, ev.to_x, ev.to_y, ev.damage);
-      if (ev.kind === 'fireball') playClashSound('fireball');
-      else if (ev.kind === 'cannon') playClashSound('cannon');
-      else playClashSound('arrow');
+      if (ev.kind === 'fireball') playClashSound('fireball', eventX);
+      else if (ev.kind === 'cannon') playClashSound('cannon', eventX);
+      else playClashSound('arrow', eventX);
     } else if (ev.type === 'tower_attack') {
       fxEngine.addProjectile(ev.kind || 'arrow', ev.from_x, ev.from_y, ev.to_x, ev.to_y, ev.damage);
-      if (ev.kind === 'cannon') playClashSound('cannon');
-      else playClashSound('arrow');
+      if (ev.kind === 'cannon') playClashSound('cannon', eventX);
+      else playClashSound('arrow', eventX);
     } else if (ev.type === 'death') {
       fxEngine.addElixirPoof(ev.x, ev.y);
     } else if (ev.type === 'deploy') {
-      playClashSound('deploy');
+      playClashSound('deploy', eventX);
     } else if (ev.type === 'tower_destroyed') {
       triggerScreenShake(12);
-      playClashSound('cannon');
-      playClashSound('crown');
+      playClashSound('cannon', eventX);
+      playClashSound('crown', eventX);
     } else if (ev.type === 'shake') {
       triggerScreenShake(ev.intensity || 6);
     } else if (ev.type === 'double_elixir') {
@@ -711,11 +884,24 @@ function setBarWidth(id, pct) {
 function renderTowerEntity(team, towerKey, towerData) {
   const el = document.getElementById(`tower_${team}_${towerKey}`);
   const tag = document.getElementById(`tag_${team}_${towerKey}`);
+  const fill = document.getElementById(`fill_${team}_${towerKey}`);
+  const cannon = document.getElementById(`cannon_${team}_${towerKey}`);
   if (!el || !towerData) return;
+
+  const hpPct = Math.max(0, Math.min(100, (towerData.hp / towerData.max_hp) * 100));
+  if (fill) fill.style.width = `${hpPct}%`;
+
+  if (cannon) {
+    if (towerData.active || towerData.hp < towerData.max_hp) {
+      cannon.classList.add('cannon-active');
+    } else {
+      cannon.classList.remove('cannon-active');
+    }
+  }
 
   if (towerData.destroyed) {
     el.classList.add('destroyed');
-    if (tag) tag.textContent = 'FALLEN';
+    if (tag) tag.textContent = '0';
   } else {
     el.classList.remove('destroyed');
     if (tag) tag.textContent = `${towerData.hp}`;
@@ -724,22 +910,26 @@ function renderTowerEntity(team, towerKey, towerData) {
 
 function renderHandCards(team, deckList, currentElixir) {
   const container = document.getElementById(`${team}HandCards`);
-  if (!container || !deckList) return;
+  const trayContainer = (team === 'blue') ? document.getElementById('trayHandSlots') : null;
 
-  container.innerHTML = '';
-  deckList.forEach(cardId => {
-    const proto = CARD_PROTOS[cardId] || { name: cardId, elixir: 3, icon: '⚔️' };
-    const cardEl = document.createElement('div');
-    const isAffordable = currentElixir >= proto.elixir;
-    cardEl.className = `hand-card ${isAffordable ? 'affordable' : ''}`;
-    cardEl.title = `${proto.name} (⚡${proto.elixir} Elixir) - ${proto.type}`;
-    cardEl.innerHTML = `
-      <span class="c-icon">${proto.icon}</span>
-      <span class="c-cost">💧${proto.elixir}</span>
-      <span class="c-name">${proto.name}</span>
-    `;
-    container.appendChild(cardEl);
-  });
+  if (container && deckList) {
+    container.innerHTML = '';
+    deckList.forEach(cardId => {
+      const proto = CARD_PROTOS[cardId] || { name: cardId, elixir: 3, icon: '⚔️', rarity: 'common' };
+      const isAffordable = currentElixir >= proto.elixir;
+      const cardEl = document.createElement('div');
+      cardEl.className = `hand-card-3d rarity-${proto.rarity || 'common'} ${isAffordable ? 'affordable' : 'unaffordable'}`;
+      cardEl.title = `${proto.name} (💧 ${proto.elixir} Elixir) - ${proto.type}`;
+      cardEl.innerHTML = `
+        <div class="hand-card-elixir">💧${proto.elixir}</div>
+        <div class="hand-card-icon">${proto.icon}</div>
+        <div class="hand-card-name">${proto.name}</div>
+        <div class="hand-card-level">Lvl 11</div>
+        ${!isAffordable ? `<div class="elixir-lock-overlay"></div>` : ''}
+      `;
+      container.appendChild(cardEl);
+    });
+  }
 }
 
 function renderTroops(troopsList) {
@@ -748,20 +938,24 @@ function renderTroops(troopsList) {
 
   layer.innerHTML = '';
   troopsList.forEach(t => {
-    const proto = CARD_PROTOS[t.card_id] || { icon: '⚔️' };
+    const proto = CARD_PROTOS[t.card_id] || { icon: '⚔️', category: 'troop' };
     const hpPct = Math.max(0, Math.min(100, (t.hp / t.max_hp) * 100));
+    const isAir = proto.category === 'air';
+    const isBoss = t.card_id === 'pekka' || t.card_id === 'giant';
 
     const avatar = document.createElement('div');
-    avatar.className = 'troop-avatar';
+    avatar.className = `troop-avatar-3d ${isAir ? 'air-unit' : ''} ${isBoss ? 'boss-unit' : ''}`;
     avatar.style.left = `${t.x}%`;
     avatar.style.top = `${t.y}%`;
 
     avatar.innerHTML = `
-      <div class="troop-circle troop-team-${t.team}" title="${t.name} (${t.hp}/${t.max_hp} HP)">
-        ${proto.icon}
+      <div class="troop-shadow"></div>
+      <div class="troop-badge troop-team-${t.team} card-${t.card_id}" title="${t.name} (${t.hp}/${t.max_hp} HP)">
+        <span class="troop-icon">${proto.icon}</span>
+        <span class="troop-lvl">11</span>
       </div>
       <div class="troop-hp-bar">
-        <div class="troop-hp-fill" style="width: ${hpPct}%;"></div>
+        <div class="troop-hp-fill ${t.team === 'red' ? 'fill-red-hp' : 'fill-blue-hp'}" style="width: ${hpPct}%;"></div>
       </div>
     `;
     layer.appendChild(avatar);
@@ -771,6 +965,10 @@ function renderTroops(troopsList) {
 // Caster Combat Feed Ticker
 function renderFeed(logs) {
   const feedEl = document.getElementById('combatFeed');
+  const badgeEl = document.getElementById('feedCounterBadge');
+  if (badgeEl && logs) {
+    badgeEl.textContent = `${logs.length} EVENTS RECORDED`;
+  }
   if (!feedEl || !logs) return;
 
   if (logs.length !== lastLogCount) {
@@ -807,10 +1005,47 @@ function showVictoryModal(state) {
   crest.textContent = isDraw ? '⚖️' : '👑';
   title.textContent = isDraw ? 'DRAW // SUDDEN DEATH' : `${(state.players[winner] || {}).name || winner.toUpperCase()} VICTORIOUS!`;
   title.style.color = isDraw ? '#facc15' : (isRed ? '#ef4444' : '#0ea5e9');
-  reason.textContent = state.win_reason;
+  reason.textContent = state.win_reason || 'Match concluded via autonomous strategy execution.';
+
+  setElText('modalRedName', (red.name || 'RED STRATEGY').toUpperCase());
+  setElText('modalBlueName', (blue.name || 'BLUE STRATEGY').toUpperCase());
 
   if (redCrownsEl) redCrownsEl.textContent = `🔴 ${red.crowns || 0} CROWNS`;
   if (blueCrownsEl) blueCrownsEl.textContent = `🔵 ${blue.crowns || 0} CROWNS`;
+
+  // Head-to-Head Battle Statistics Calculation
+  const redKingHp = (red.towers && red.towers.king) ? red.towers.king.hp : 0;
+  const blueKingHp = (blue.towers && blue.towers.king) ? blue.towers.king.hp : 0;
+  const redPrincessHp = ((red.towers?.left_princess?.hp || 0) + (red.towers?.right_princess?.hp || 0));
+  const bluePrincessHp = ((blue.towers?.left_princess?.hp || 0) + (blue.towers?.right_princess?.hp || 0));
+  
+  const totalBaseHp = 2400 + 1400 * 2; // 5200 HP total
+  const redDmg = Math.max(0, totalBaseHp - (blueKingHp + bluePrincessHp));
+  const blueDmg = Math.max(0, totalBaseHp - (redKingHp + redPrincessHp));
+
+  setElText('statRedDmg', `${redDmg} HP`);
+  setElText('statBlueDmg', `${blueDmg} HP`);
+
+  let redCards = 0;
+  let blueCards = 0;
+  const logs = state.combat_log || [];
+  logs.forEach(l => {
+    const txt = l.text || '';
+    if (txt.includes('deployed') || txt.includes('cast')) {
+      if (txt.includes(red.name || 'Red') || txt.toLowerCase().includes('red')) redCards++;
+      else if (txt.includes(blue.name || 'Blue') || txt.toLowerCase().includes('blue')) blueCards++;
+    }
+  });
+  setElText('statRedCards', redCards || (red.cards_played || 12));
+  setElText('statBlueCards', blueCards || (blue.cards_played || 11));
+
+  const elixirRate = state.is_double_elixir ? 0.7 : 0.35;
+  const estElixir = Math.min(100, Math.floor((state.elapsed_seconds || 60) * elixirRate));
+  setElText('statRedElixir', `${red.total_elixir_spent || estElixir}💧`);
+  setElText('statBlueElixir', `${blue.total_elixir_spent || estElixir}💧`);
+
+  setElText('statRedKingHp', `${redKingHp} HP`);
+  setElText('statBlueKingHp', `${blueKingHp} HP`);
 
   modal.classList.add('active');
   playClashSound('crown');
@@ -967,8 +1202,101 @@ function switchToBracket() { switchView('bracket'); }
 function switchToLobby() { switchView('lobby'); }
 function switchToRules() { switchView('rules'); }
 
-// Cards Catalog Guide
+// Global 3D State Variables
+let card3dRenderer = null, card3dScene = null, card3dCamera = null, card3dControls = null, card3dMeshGroup = null, card3dAnimReq = null;
+let currentInspectedCardId = null;
+let arena3dRenderer = null, arena3dScene = null, arena3dCamera = null, arena3dControls = null, arena3dAnimReq = null;
+let isArena3dAutoRotating = false;
+let currentFilterType = 'all', currentFilterElixir = 'all', currentSearchQuery = '';
+
+// Codex Sub-Nav Tab Switching
+function setupCodexSubtabs() {
+  const btnCompendium = document.getElementById('tabCompendium3D');
+  const btnArena = document.getElementById('tabArenaRules3D');
+  const panelCompendium = document.getElementById('subpanelCompendium');
+  const panelArena = document.getElementById('subpanelArena');
+
+  if (!btnCompendium || !btnArena || !panelCompendium || !panelArena) return;
+
+  btnCompendium.onclick = () => {
+    btnCompendium.classList.add('active');
+    btnArena.classList.remove('active');
+    panelCompendium.style.display = 'block';
+    panelArena.style.display = 'none';
+    playClashSound('deploy');
+  };
+
+  btnArena.onclick = () => {
+    btnArena.classList.add('active');
+    btnCompendium.classList.remove('active');
+    panelArena.style.display = 'block';
+    panelCompendium.style.display = 'none';
+    playClashSound('horn');
+    setTimeout(initArena3dDiorama, 50);
+  };
+}
+
+// Card Filter Toolbar Setup
+function setupCardFilters() {
+  const typeBtns = document.querySelectorAll('[data-filter-type]');
+  const elixirBtns = document.querySelectorAll('[data-filter-elixir]');
+  const searchInput = document.getElementById('cardSearchInput');
+
+  typeBtns.forEach(btn => {
+    btn.onclick = () => {
+      typeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilterType = btn.dataset.filterType;
+      filterCards3DGrid();
+      playClashSound('sword');
+    };
+  });
+
+  elixirBtns.forEach(btn => {
+    btn.onclick = () => {
+      elixirBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilterElixir = btn.dataset.filterElixir;
+      filterCards3DGrid();
+      playClashSound('sword');
+    };
+  });
+
+  if (searchInput) {
+    searchInput.oninput = (e) => {
+      currentSearchQuery = e.target.value.toLowerCase().trim();
+      filterCards3DGrid();
+    };
+  }
+}
+
+function filterCards3DGrid() {
+  const cardEls = document.querySelectorAll('.catalog-card-3d');
+  cardEls.forEach(el => {
+    const cardId = el.dataset.cardId;
+    const proto = CARD_PROTOS[cardId];
+    if (!proto) return;
+
+    let matchesType = (currentFilterType === 'all') || (proto.category === currentFilterType);
+    let matchesElixir = (currentFilterElixir === 'all') || (proto.elixir.toString() === currentFilterElixir);
+    let matchesSearch = !currentSearchQuery || 
+                        proto.name.toLowerCase().includes(currentSearchQuery) || 
+                        cardId.toLowerCase().includes(currentSearchQuery) ||
+                        proto.desc.toLowerCase().includes(currentSearchQuery);
+
+    if (matchesType && matchesElixir && matchesSearch) {
+      el.style.display = 'block';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+}
+
+// 3D Cards Catalog Rendering Engine
 function renderCardsCatalog() {
+  setupCodexSubtabs();
+  setupCardFilters();
+
   const grid = document.getElementById('cardsCatalogGrid');
   const chipContainer = document.getElementById('quickCardChips');
 
@@ -992,6 +1320,7 @@ function renderCardsCatalog() {
           chip.style.borderColor = '';
           chip.style.color = '';
         }, 1200);
+        playClashSound('deploy');
       };
       chipContainer.appendChild(chip);
     });
@@ -1003,25 +1332,702 @@ function renderCardsCatalog() {
   Object.keys(CARD_PROTOS).forEach(k => {
     const c = CARD_PROTOS[k];
     const cardEl = document.createElement('div');
-    cardEl.className = 'catalog-card';
+    cardEl.className = `catalog-card-3d rarity-${c.rarity || 'common'}`;
+    cardEl.dataset.cardId = k;
+
     cardEl.innerHTML = `
-      <div class="catalog-top">
-        <span class="c-icon">${c.icon}</span>
-        <span class="c-elixir">💧 ${c.elixir} Elixir</span>
+      <div class="card-3d-inner">
+        <div class="card-3d-top">
+          <span class="card-rarity-badge">${(c.rarity || 'COMMON').toUpperCase()}</span>
+          <span class="card-3d-elixir">💧 ${c.elixir}</span>
+        </div>
+
+        <div class="card-3d-avatar-box">
+          ${c.icon}
+        </div>
+
+        <div class="card-3d-title-block">
+          <h3>${c.name}</h3>
+          <span class="card-3d-type-sub">${c.type}</span>
+        </div>
+
+        <div class="card-3d-stats-mini">
+          <span><i data-lucide="heart"></i> ${c.hp} HP</span>
+          <span><i data-lucide="zap"></i> ${c.dmg} DMG</span>
+        </div>
+
+        <div class="card-3d-actions">
+          <button class="btn-card-inspect" onclick="openCard3dInspector('${k}')">
+            <i data-lucide="box"></i> INSPECT IN 3D
+          </button>
+        </div>
       </div>
-      <h3>${c.name}</h3>
-      <div class="card-id-badge" title="Click to copy card ID '${k}'" onclick="navigator.clipboard.writeText('${k}'); const prev=this.innerHTML; this.innerHTML='<i data-lucide=&quot;check&quot;></i> Copied!'; if(window.lucide)lucide.createIcons(); setTimeout(()=>{this.innerHTML=prev; if(window.lucide)lucide.createIcons();}, 1200);">
-        <i data-lucide="clipboard"></i> <span>ID: <code>${k}</code></span>
-      </div>
-      <div class="catalog-stats">Role: ${c.type} | HP: ${c.hp} | Damage: ${c.dmg}</div>
-      <p>${c.desc}</p>
     `;
+
+    // Interactive 3D Mouse Tilt Parallax
+    cardEl.addEventListener('mousemove', (e) => {
+      const rect = cardEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -12;
+      const rotateY = ((x - centerX) / centerX) * 12;
+      cardEl.style.setProperty('--rx', `${rotateX}deg`);
+      cardEl.style.setProperty('--ry', `${rotateY}deg`);
+      cardEl.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+      cardEl.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+    });
+
+    cardEl.addEventListener('mouseleave', () => {
+      cardEl.style.setProperty('--rx', '0deg');
+      cardEl.style.setProperty('--ry', '0deg');
+    });
+
+    cardEl.addEventListener('mouseenter', () => {
+      playClashSound('sword');
+    });
+
     grid.appendChild(cardEl);
   });
 
   if (window.lucide) {
     lucide.createIcons();
   }
+}
+
+// 3D Card Inspector Modal Engine
+window.openCard3dInspector = function(cardId) {
+  const proto = CARD_PROTOS[cardId];
+  if (!proto) return;
+
+  currentInspectedCardId = cardId;
+  const modal = document.getElementById('card3dModal');
+  if (!modal) return;
+
+  setElText('modalCard3dRarity', `${(proto.rarity || 'COMMON').toUpperCase()} ${proto.category.toUpperCase()}`);
+  setElText('modalCard3dIcon', proto.icon);
+  setElText('modalCard3dName', proto.name);
+  setElText('modalCard3dType', proto.type);
+  setElText('modalCard3dElixir', `💧 ${proto.elixir} ELIXIR`);
+  setElText('modalCard3dId', cardId);
+  setElText('modalCard3dDesc', proto.desc);
+  setElText('modalCard3dTarget', proto.targetStr);
+  setElText('modalCard3dSpeed', proto.speedStr);
+  setElText('modalCard3dSynergies', proto.synergies || 'Standard Deck Support');
+  setElText('modalCard3dCounters', proto.counters || 'Crown Towers');
+
+  const btnCopyModal = document.getElementById('btnCopyModalCardId');
+  if (btnCopyModal) {
+    btnCopyModal.onclick = () => {
+      navigator.clipboard.writeText(cardId);
+      btnCopyModal.innerHTML = '✓ Copied';
+      setTimeout(() => btnCopyModal.innerHTML = '<i data-lucide="copy"></i> Copy', 1200);
+    };
+  }
+
+  const slider = document.getElementById('cardLevelSlider');
+  const levelNum = document.getElementById('cardLevelNum');
+  if (slider) {
+    slider.value = 11;
+    if (levelNum) levelNum.textContent = 'Level 11 (Tournament Standard)';
+    updateScaledCardStats(cardId, 11);
+
+    slider.oninput = (e) => {
+      const lvl = parseInt(e.target.value, 10);
+      if (levelNum) levelNum.textContent = `Level ${lvl} ${lvl === 11 ? '(Tournament Standard)' : ''}`;
+      updateScaledCardStats(cardId, lvl);
+    };
+  }
+
+  const btnTestAttack = document.getElementById('btn3dTestAttack');
+  const btnSound = document.getElementById('btn3dPlaySound');
+  if (btnTestAttack) btnTestAttack.onclick = () => trigger3dAttackAnimation(cardId);
+  if (btnSound) btnSound.onclick = () => playCardSoundEffect(cardId);
+
+  modal.classList.add('active');
+  playClashSound('horn');
+
+  setTimeout(() => initCard3dStage(cardId), 50);
+
+  const btnDismiss = document.getElementById('btnCard3dDismiss');
+  if (btnDismiss) {
+    btnDismiss.onclick = () => {
+      modal.classList.remove('active');
+      if (card3dAnimReq) cancelAnimationFrame(card3dAnimReq);
+    };
+  }
+};
+
+function updateScaledCardStats(cardId, level) {
+  const proto = CARD_PROTOS[cardId];
+  if (!proto) return;
+
+  const multiplier = 1 + (level - 1) * 0.10;
+  
+  if (typeof proto.hp === 'number') {
+    const scaledHp = Math.round(proto.hp * multiplier);
+    setElText('modalCard3dHp', scaledHp.toLocaleString());
+    const barHp = document.getElementById('barModalHp');
+    if (barHp) barHp.style.width = `${Math.min(100, Math.max(15, (scaledHp / 3000) * 100))}%`;
+  } else {
+    setElText('modalCard3dHp', proto.hp);
+    const barHp = document.getElementById('barModalHp');
+    if (barHp) barHp.style.width = '100%';
+  }
+
+  if (typeof proto.dmg === 'number') {
+    const scaledDmg = Math.round(proto.dmg * multiplier);
+    setElText('modalCard3dDmg', scaledDmg.toLocaleString());
+    const barDmg = document.getElementById('barModalDmg');
+    if (barDmg) barDmg.style.width = `${Math.min(100, Math.max(15, (scaledDmg / 500) * 100))}%`;
+  } else {
+    setElText('modalCard3dDmg', proto.dmg);
+  }
+}
+
+// Three.js 3D Stage for Card Inspector
+function initCard3dStage(cardId) {
+  const canvas = document.getElementById('card3dCanvas');
+  if (!canvas || !window.THREE) return;
+
+  if (card3dAnimReq) cancelAnimationFrame(card3dAnimReq);
+
+  const width = canvas.clientWidth || 360;
+  const height = canvas.clientHeight || 380;
+
+  card3dScene = new THREE.Scene();
+  card3dScene.background = new THREE.Color(0x0c1322);
+  card3dScene.fog = new THREE.FogExp2(0x0c1322, 0.04);
+
+  card3dCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  card3dCamera.position.set(0, 3.2, 7.5);
+
+  card3dRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  card3dRenderer.setSize(width, height);
+  card3dRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  if (THREE.OrbitControls) {
+    card3dControls = new THREE.OrbitControls(card3dCamera, card3dRenderer.domElement);
+    card3dControls.enableDamping = true;
+    card3dControls.dampingFactor = 0.05;
+    card3dControls.maxPolarAngle = Math.PI / 2 + 0.1;
+  }
+
+  // Lighting
+  const amb = new THREE.AmbientLight(0xffffff, 0.6);
+  card3dScene.add(amb);
+
+  const spot = new THREE.SpotLight(0xffd700, 1.4);
+  spot.position.set(5, 10, 5);
+  card3dScene.add(spot);
+
+  const rim = new THREE.DirectionalLight(0x3b82f6, 0.9);
+  rim.position.set(-5, 4, -5);
+  card3dScene.add(rim);
+
+  // Pedestal
+  const pedestalGeo = new THREE.CylinderGeometry(2.5, 2.7, 0.4, 32);
+  const pedestalMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3, metalness: 0.7 });
+  const pedestal = new THREE.Mesh(pedestalGeo, pedestalMat);
+  pedestal.position.y = -0.2;
+  card3dScene.add(pedestal);
+
+  const ringGeo = new THREE.TorusGeometry(2.55, 0.06, 16, 64);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0xffd700 });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = Math.PI / 2;
+  ring.position.y = 0.01;
+  card3dScene.add(ring);
+
+  // Custom 3D Procedural Mesh
+  card3dMeshGroup = build3dElementMesh(cardId);
+  card3dScene.add(card3dMeshGroup);
+
+  let clock = new THREE.Clock();
+  function animate() {
+    card3dAnimReq = requestAnimationFrame(animate);
+    const time = clock.getElapsedTime();
+
+    if (card3dControls) card3dControls.update();
+
+    if (card3dMeshGroup) {
+      card3dMeshGroup.rotation.y = time * 0.4;
+      card3dMeshGroup.position.y = Math.sin(time * 2.0) * 0.08 + 0.1;
+
+      if (cardId === 'baby_dragon' && card3dMeshGroup.userData.wings) {
+        card3dMeshGroup.userData.wings.forEach((wing, i) => {
+          wing.rotation.z = Math.sin(time * 8.0) * 0.3 * (i === 0 ? 1 : -1);
+        });
+      } else if (cardId === 'fireball' && card3dMeshGroup.userData.rings) {
+        card3dMeshGroup.userData.rings.forEach((r, idx) => {
+          r.rotation.x += 0.02 * (idx + 1);
+          r.rotation.y += 0.03 * (idx + 1);
+        });
+      }
+    }
+
+    card3dRenderer.render(card3dScene, card3dCamera);
+  }
+
+  animate();
+}
+
+function build3dElementMesh(cardId) {
+  const group = new THREE.Group();
+
+  if (cardId === 'knight') {
+    const torsoGeo = new THREE.CylinderGeometry(0.5, 0.4, 1.2, 16);
+    const torsoMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2 });
+    const torso = new THREE.Mesh(torsoGeo, torsoMat);
+    torso.position.y = 0.6;
+    group.add(torso);
+
+    const headGeo = new THREE.SphereGeometry(0.35, 16, 16);
+    const headMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9 });
+    const head = new THREE.Mesh(headGeo, headMat);
+    head.position.y = 1.45;
+    group.add(head);
+
+    const visorGeo = new THREE.BoxGeometry(0.4, 0.12, 0.38);
+    const visorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9 });
+    const visor = new THREE.Mesh(visorGeo, visorMat);
+    visor.position.set(0, 1.45, 0.1);
+    group.add(visor);
+
+    const plumeGeo = new THREE.ConeGeometry(0.15, 0.4, 8);
+    const plumeMat = new THREE.MeshStandardMaterial({ color: 0xffd700 });
+    const plume = new THREE.Mesh(plumeGeo, plumeMat);
+    plume.position.set(0, 1.85, 0);
+    group.add(plume);
+
+    const bladeGeo = new THREE.BoxGeometry(0.08, 1.2, 0.04);
+    const bladeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.95 });
+    const blade = new THREE.Mesh(bladeGeo, bladeMat);
+    blade.position.set(0.7, 0.9, 0.2);
+    blade.rotation.z = -Math.PI / 6;
+    group.add(blade);
+
+    const shieldGeo = new THREE.BoxGeometry(0.6, 0.8, 0.1);
+    const shieldMat = new THREE.MeshStandardMaterial({ color: 0x2563eb });
+    const shield = new THREE.Mesh(shieldGeo, shieldMat);
+    shield.position.set(-0.6, 0.7, 0.3);
+    group.add(shield);
+  }
+  else if (cardId === 'archers') {
+    [-0.5, 0.5].forEach((xPos) => {
+      const archer = new THREE.Group();
+      const bodyGeo = new THREE.CylinderGeometry(0.3, 0.25, 1.0, 12);
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x166534 });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      body.position.y = 0.5;
+      archer.add(body);
+
+      const hoodGeo = new THREE.SphereGeometry(0.28, 12, 12);
+      const hoodMat = new THREE.MeshStandardMaterial({ color: 0x15803d });
+      const hood = new THREE.Mesh(hoodGeo, hoodMat);
+      hood.position.y = 1.15;
+      archer.add(hood);
+
+      const bowGeo = new THREE.TorusGeometry(0.4, 0.03, 8, 16, Math.PI);
+      const bowMat = new THREE.MeshStandardMaterial({ color: 0x78350f });
+      const bow = new THREE.Mesh(bowGeo, bowMat);
+      bow.position.set(0.3, 0.7, 0.2);
+      bow.rotation.y = Math.PI / 2;
+      archer.add(bow);
+
+      archer.position.x = xPos;
+      group.add(archer);
+    });
+  }
+  else if (cardId === 'giant') {
+    const bodyGeo = new THREE.CylinderGeometry(0.9, 0.7, 1.6, 16);
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.8 });
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.y = 0.8;
+    group.add(body);
+
+    const headGeo = new THREE.BoxGeometry(0.7, 0.7, 0.7);
+    const headMat = new THREE.MeshStandardMaterial({ color: 0xd97706 });
+    const head = new THREE.Mesh(headGeo, headMat);
+    head.position.y = 1.95;
+    group.add(head);
+
+    [-1.0, 1.0].forEach(x => {
+      const fistGeo = new THREE.SphereGeometry(0.4, 12, 12);
+      const fistMat = new THREE.MeshStandardMaterial({ color: 0x78350f });
+      const fist = new THREE.Mesh(fistGeo, fistMat);
+      fist.position.set(x, 0.7, 0.3);
+      group.add(fist);
+    });
+  }
+  else if (cardId === 'musketeer') {
+    const bodyGeo = new THREE.CylinderGeometry(0.4, 0.35, 1.1, 14);
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x6b21a8 });
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.y = 0.55;
+    group.add(body);
+
+    const hatDiskGeo = new THREE.CylinderGeometry(0.7, 0.7, 0.06, 16);
+    const hatMat = new THREE.MeshStandardMaterial({ color: 0x581c87 });
+    const hatDisk = new THREE.Mesh(hatDiskGeo, hatMat);
+    hatDisk.position.y = 1.45;
+    group.add(hatDisk);
+
+    const hatTopGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 16);
+    const hatTop = new THREE.Mesh(hatTopGeo, hatMat);
+    hatTop.position.y = 1.6;
+    group.add(hatTop);
+
+    const rifleGeo = new THREE.CylinderGeometry(0.06, 0.12, 1.4, 12);
+    const rifleMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8 });
+    const rifle = new THREE.Mesh(rifleGeo, rifleMat);
+    rifle.position.set(0.3, 0.8, 0.4);
+    rifle.rotation.x = Math.PI / 3;
+    group.add(rifle);
+  }
+  else if (cardId === 'hog_rider') {
+    const hogGeo = new THREE.SphereGeometry(0.7, 16, 16);
+    hogGeo.scale(1, 0.7, 1.4);
+    const hogMat = new THREE.MeshStandardMaterial({ color: 0x78350f });
+    const hog = new THREE.Mesh(hogGeo, hogMat);
+    hog.position.y = 0.6;
+    group.add(hog);
+
+    const riderGeo = new THREE.CylinderGeometry(0.4, 0.3, 0.9, 12);
+    const riderMat = new THREE.MeshStandardMaterial({ color: 0x92400e });
+    const rider = new THREE.Mesh(riderGeo, riderMat);
+    rider.position.set(0, 1.2, -0.1);
+    group.add(rider);
+
+    const hammerShaftGeo = new THREE.CylinderGeometry(0.04, 0.04, 1.3, 8);
+    const hammerMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8 });
+    const shaft = new THREE.Mesh(hammerShaftGeo, hammerMat);
+    shaft.position.set(0.6, 1.6, 0.1);
+    shaft.rotation.z = -Math.PI / 4;
+    group.add(shaft);
+
+    const headGeo = new THREE.BoxGeometry(0.4, 0.3, 0.3);
+    const head = new THREE.Mesh(headGeo, hammerMat);
+    head.position.set(0.9, 2.0, 0.1);
+    group.add(head);
+  }
+  else if (cardId === 'skeletons') {
+    const offsets = [[-0.4, -0.4], [0.4, -0.4], [-0.4, 0.4], [0.4, 0.4]];
+    offsets.forEach(([xPos, zPos]) => {
+      const skel = new THREE.Group();
+      const headGeo = new THREE.SphereGeometry(0.22, 12, 12);
+      const headMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+      const head = new THREE.Mesh(headGeo, headMat);
+      head.position.y = 0.6;
+      skel.add(head);
+
+      const eyeGeo = new THREE.SphereGeometry(0.04, 8, 8);
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+      const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+      const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
+      eyeL.position.set(-0.08, 0.63, 0.18);
+      eyeR.position.set(0.08, 0.63, 0.18);
+      skel.add(eyeL);
+      skel.add(eyeR);
+
+      const bodyGeo = new THREE.CylinderGeometry(0.12, 0.1, 0.5, 8);
+      const body = new THREE.Mesh(bodyGeo, headMat);
+      body.position.y = 0.25;
+      skel.add(body);
+
+      skel.position.set(xPos, 0, zPos);
+      group.add(skel);
+    });
+  }
+  else if (cardId === 'baby_dragon') {
+    const dragonBodyGeo = new THREE.SphereGeometry(0.65, 16, 16);
+    dragonBodyGeo.scale(1, 0.8, 1.2);
+    const dragonMat = new THREE.MeshStandardMaterial({ color: 0x16a34a });
+    const dragon = new THREE.Mesh(dragonBodyGeo, dragonMat);
+    dragon.position.y = 1.2;
+    group.add(dragon);
+
+    const wings = [];
+    [-1, 1].forEach(side => {
+      const wingGeo = new THREE.ConeGeometry(0.6, 0.9, 3);
+      const wingMat = new THREE.MeshStandardMaterial({ color: 0x15803d, side: THREE.DoubleSide });
+      const wing = new THREE.Mesh(wingGeo, wingMat);
+      wing.position.set(side * 0.7, 1.3, 0);
+      wing.rotation.x = Math.PI / 2;
+      wing.rotation.z = side * Math.PI / 3;
+      group.add(wing);
+      wings.push(wing);
+    });
+    group.userData.wings = wings;
+
+    const fireGeo = new THREE.SphereGeometry(0.12, 8, 8);
+    const fireMat = new THREE.MeshBasicMaterial({ color: 0xf97316 });
+    for (let i = 0; i < 5; i++) {
+      const f = new THREE.Mesh(fireGeo, fireMat);
+      f.position.set(0, 1.1 - i * 0.08, 0.7 + i * 0.18);
+      group.add(f);
+    }
+  }
+  else if (cardId === 'pekka') {
+    const torsoGeo = new THREE.BoxGeometry(1.1, 1.3, 0.8);
+    const torsoMat = new THREE.MeshStandardMaterial({ color: 0x312e81, metalness: 0.9 });
+    const torso = new THREE.Mesh(torsoGeo, torsoMat);
+    torso.position.y = 0.85;
+    group.add(torso);
+
+    const headGeo = new THREE.BoxGeometry(0.6, 0.5, 0.6);
+    const headMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, metalness: 0.95 });
+    const head = new THREE.Mesh(headGeo, headMat);
+    head.position.y = 1.65;
+    group.add(head);
+
+    [-0.35, 0.35].forEach(x => {
+      const hornGeo = new THREE.ConeGeometry(0.12, 0.5, 8);
+      const hornMat = new THREE.MeshStandardMaterial({ color: 0xc026d3, metalness: 0.8 });
+      const horn = new THREE.Mesh(hornGeo, hornMat);
+      horn.position.set(x, 2.0, 0);
+      horn.rotation.z = x > 0 ? -Math.PI / 6 : Math.PI / 6;
+      group.add(horn);
+    });
+
+    const visorGeo = new THREE.BoxGeometry(0.45, 0.08, 0.1);
+    const visorMat = new THREE.MeshBasicMaterial({ color: 0xa855f7 });
+    const visor = new THREE.Mesh(visorGeo, visorMat);
+    visor.position.set(0, 1.65, 0.31);
+    group.add(visor);
+
+    [-0.8, 0.8].forEach(x => {
+      const swordGeo = new THREE.BoxGeometry(0.12, 1.5, 0.05);
+      const swordMat = new THREE.MeshStandardMaterial({ color: 0xa855f7, metalness: 0.9 });
+      const sword = new THREE.Mesh(swordGeo, swordMat);
+      sword.position.set(x, 1.0, 0.3);
+      group.add(sword);
+    });
+  }
+  else if (cardId === 'fireball') {
+    const coreGeo = new THREE.SphereGeometry(0.8, 24, 24);
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xf97316 });
+    const core = new THREE.Mesh(coreGeo, coreMat);
+    core.position.y = 1.0;
+    group.add(core);
+
+    const rings = [];
+    [1.0, 1.2].forEach((radius, idx) => {
+      const ringGeo = new THREE.TorusGeometry(radius, 0.08, 12, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color: idx === 0 ? 0xef4444 : 0xeab308 });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.y = 1.0;
+      group.add(ring);
+      rings.push(ring);
+    });
+    group.userData.rings = rings;
+  }
+  else if (cardId === 'goblin_barrel') {
+    const barrelGeo = new THREE.CylinderGeometry(0.65, 0.65, 1.2, 16);
+    const barrelMat = new THREE.MeshStandardMaterial({ color: 0x78350f });
+    const barrel = new THREE.Mesh(barrelGeo, barrelMat);
+    barrel.position.y = 0.6;
+    group.add(barrel);
+
+    [-0.3, 0.3].forEach(y => {
+      const bandGeo = new THREE.TorusGeometry(0.66, 0.04, 8, 24);
+      const bandMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8 });
+      const band = new THREE.Mesh(bandGeo, bandMat);
+      band.rotation.x = Math.PI / 2;
+      band.position.y = 0.6 + y;
+      group.add(band);
+    });
+
+    for (let i = 0; i < 3; i++) {
+      const angle = (i / 3) * Math.PI * 2;
+      const headGeo = new THREE.SphereGeometry(0.2, 12, 12);
+      const headMat = new THREE.MeshStandardMaterial({ color: 0x15803d });
+      const head = new THREE.Mesh(headGeo, headMat);
+      head.position.set(Math.cos(angle) * 0.35, 1.25, Math.sin(angle) * 0.35);
+      group.add(head);
+    }
+  }
+
+  return group;
+}
+
+function trigger3dAttackAnimation(cardId) {
+  if (!card3dMeshGroup) return;
+
+  playCardSoundEffect(cardId);
+
+  let startY = card3dMeshGroup.position.y;
+  let startTime = Date.now();
+  
+  function anim() {
+    let elapsed = (Date.now() - startTime) / 1000;
+    if (elapsed < 0.4) {
+      card3dMeshGroup.position.y = startY + Math.sin((elapsed / 0.4) * Math.PI) * 0.4;
+      card3dMeshGroup.rotation.x = Math.sin((elapsed / 0.4) * Math.PI * 2) * 0.2;
+      requestAnimationFrame(anim);
+    } else {
+      card3dMeshGroup.position.y = startY;
+      card3dMeshGroup.rotation.x = 0;
+    }
+  }
+  anim();
+}
+
+function playCardSoundEffect(cardId) {
+  if (cardId === 'knight' || cardId === 'pekka') playClashSound('sword');
+  else if (cardId === 'giant' || cardId === 'hog_rider') playClashSound('cannon');
+  else if (cardId === 'archers' || cardId === 'musketeer') playClashSound('arrow');
+  else if (cardId === 'fireball' || cardId === 'baby_dragon') playClashSound('fireball');
+  else playClashSound('deploy');
+}
+
+// Three.js 3D Arena Holo-Diorama Engine
+function initArena3dDiorama() {
+  const canvas = document.getElementById('arena3dCanvas');
+  if (!canvas || !window.THREE) return;
+
+  if (arena3dAnimReq) cancelAnimationFrame(arena3dAnimReq);
+
+  const width = canvas.clientWidth || 500;
+  const height = canvas.clientHeight || 440;
+
+  arena3dScene = new THREE.Scene();
+  arena3dScene.background = new THREE.Color(0x0a101d);
+  arena3dScene.fog = new THREE.FogExp2(0x0a101d, 0.02);
+
+  arena3dCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  arena3dCamera.position.set(0, 14, 18);
+
+  arena3dRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  arena3dRenderer.setSize(width, height);
+  arena3dRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  if (THREE.OrbitControls) {
+    arena3dControls = new THREE.OrbitControls(arena3dCamera, arena3dRenderer.domElement);
+    arena3dControls.enableDamping = true;
+    arena3dControls.dampingFactor = 0.05;
+    arena3dControls.target.set(0, 0, 0);
+  }
+
+  const ambLight = new THREE.AmbientLight(0xffffff, 0.7);
+  arena3dScene.add(ambLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffd700, 1.2);
+  dirLight.position.set(10, 20, 10);
+  arena3dScene.add(dirLight);
+
+  // Field
+  const fieldGeo = new THREE.PlaneGeometry(16, 22);
+  const fieldMat = new THREE.MeshStandardMaterial({ color: 0x1e3a1e, roughness: 0.8 });
+  const field = new THREE.Mesh(fieldGeo, fieldMat);
+  field.rotation.x = -Math.PI / 2;
+  arena3dScene.add(field);
+
+  // River
+  const riverGeo = new THREE.PlaneGeometry(16, 2.5);
+  const riverMat = new THREE.MeshBasicMaterial({ color: 0x0284c7, transparent: true, opacity: 0.85 });
+  const river = new THREE.Mesh(riverGeo, riverMat);
+  river.rotation.x = -Math.PI / 2;
+  river.position.set(0, 0.02, 0);
+  arena3dScene.add(river);
+
+  // Bridges
+  [-4.0, 4.0].forEach(x => {
+    const bridgeGeo = new THREE.BoxGeometry(1.6, 0.15, 2.8);
+    const bridgeMat = new THREE.MeshStandardMaterial({ color: 0x78350f });
+    const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+    bridge.position.set(x, 0.08, 0);
+    arena3dScene.add(bridge);
+  });
+
+  // Towers
+  const createTower3D = (x, z, isKing, colorHex) => {
+    const group = new THREE.Group();
+    const rad = isKing ? 0.9 : 0.6;
+    const h = isKing ? 1.8 : 1.3;
+    const bodyGeo = new THREE.CylinderGeometry(rad, rad * 1.1, h, 16);
+    const bodyMat = new THREE.MeshStandardMaterial({ color: colorHex, metalness: 0.5 });
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.y = h / 2;
+    group.add(body);
+
+    if (isKing) {
+      const crownGeo = new THREE.TorusGeometry(0.5, 0.08, 8, 16);
+      const crownMat = new THREE.MeshBasicMaterial({ color: 0xffd700 });
+      const crown = new THREE.Mesh(crownGeo, crownMat);
+      crown.rotation.x = Math.PI / 2;
+      crown.position.y = h + 0.3;
+      group.add(crown);
+      group.userData.crown = crown;
+    }
+
+    group.position.set(x, 0, z);
+    arena3dScene.add(group);
+    return group;
+  };
+
+  const redKing = createTower3D(0, -8.5, true, 0xd97706);
+  createTower3D(-4.0, -5.5, false, 0xd97706);
+  createTower3D(4.0, -5.5, false, 0xd97706);
+
+  const blueKing = createTower3D(0, 8.5, true, 0x2563eb);
+  createTower3D(-4.0, 5.5, false, 0x2563eb);
+  createTower3D(4.0, 5.5, false, 0x2563eb);
+
+  // Camera Presets
+  const camBtns = document.querySelectorAll('.cam-btn[data-cam]');
+  camBtns.forEach(btn => {
+    btn.onclick = () => {
+      camBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.dataset.cam;
+      if (mode === 'iso') {
+        arena3dCamera.position.set(0, 14, 18);
+        if (arena3dControls) arena3dControls.target.set(0, 0, 0);
+      } else if (mode === 'top') {
+        arena3dCamera.position.set(0, 22, 0.1);
+        if (arena3dControls) arena3dControls.target.set(0, 0, 0);
+      } else if (mode === 'red') {
+        arena3dCamera.position.set(0, 8, -16);
+        if (arena3dControls) arena3dControls.target.set(0, 0, 0);
+      } else if (mode === 'blue') {
+        arena3dCamera.position.set(0, 8, 16);
+        if (arena3dControls) arena3dControls.target.set(0, 0, 0);
+      }
+      playClashSound('sword');
+    };
+  });
+
+  const btnAutoRotate = document.getElementById('btnToggle3DRotate');
+  if (btnAutoRotate) {
+    btnAutoRotate.onclick = () => {
+      isArena3dAutoRotating = !isArena3dAutoRotating;
+      btnAutoRotate.classList.toggle('active', isArena3dAutoRotating);
+    };
+  }
+
+  let clock = new THREE.Clock();
+  function animateArena() {
+    arena3dAnimReq = requestAnimationFrame(animateArena);
+    const time = clock.getElapsedTime();
+
+    if (arena3dControls) {
+      if (isArena3dAutoRotating) {
+        arena3dScene.rotation.y = time * 0.2;
+      } else {
+        arena3dScene.rotation.y = 0;
+      }
+      arena3dControls.update();
+    }
+
+    if (redKing && redKing.userData.crown) redKing.userData.crown.rotation.z = time * 1.5;
+    if (blueKing && blueKing.userData.crown) blueKing.userData.crown.rotation.z = time * 1.5;
+
+    arena3dRenderer.render(arena3dScene, arena3dCamera);
+  }
+
+  animateArena();
 }
 
 // Tournament Bracket Controls
@@ -1487,6 +2493,27 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (btnPause) btnPause.addEventListener('click', pauseBattle);
   if (btnStep) btnStep.addEventListener('click', stepBattle);
   if (btnReset) btnReset.addEventListener('click', resetBattle);
+
+  // Developer Telemetry Drawer Toggle
+  const btnToggleDebug = document.getElementById('btnToggleDebug');
+  const btnDebugClose = document.getElementById('btnDebugClose');
+  const debugPanel = document.getElementById('debugPanel');
+
+  if (btnToggleDebug && debugPanel) {
+    btnToggleDebug.addEventListener('click', () => {
+      const isOpen = debugPanel.style.display !== 'none';
+      debugPanel.style.display = isOpen ? 'none' : 'flex';
+      if (!isOpen && currentMatchState) {
+        updateDebugPanel(currentMatchState);
+      }
+    });
+  }
+
+  if (btnDebugClose && debugPanel) {
+    btnDebugClose.addEventListener('click', () => {
+      debugPanel.style.display = 'none';
+    });
+  }
 
   if (btnSound) {
     btnSound.addEventListener('click', () => {

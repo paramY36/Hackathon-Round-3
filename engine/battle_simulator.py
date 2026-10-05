@@ -14,9 +14,48 @@ from engine.config import (
 )
 from engine.game_state import ClashGameState, ClashTroop
 
+class SpatialGrid:
+    """2D Spatial Hash Grid dividing pitch into buckets for O(1) spatial target queries."""
+    def __init__(self, cell_size: float = 10.0):
+        self.cell_size = cell_size
+        self.grid: Dict[tuple, List[ClashTroop]] = {}
+
+    def clear(self):
+        self.grid.clear()
+
+    def insert(self, troop: ClashTroop):
+        cx = int(troop.x // self.cell_size)
+        cy = int(troop.y // self.cell_size)
+        cell = (cx, cy)
+        if cell not in self.grid:
+            self.grid[cell] = []
+        self.grid[cell].append(troop)
+
+    def query_nearby(self, x: float, y: float, radius: float) -> List[ClashTroop]:
+        min_cx = int((x - radius) // self.cell_size)
+        max_cx = int((x + radius) // self.cell_size)
+        min_cy = int((y - radius) // self.cell_size)
+        max_cy = int((y + radius) // self.cell_size)
+
+        results = []
+        for cx in range(min_cx, max_cx + 1):
+            for cy in range(min_cy, max_cy + 1):
+                cell = (cx, cy)
+                if cell in self.grid:
+                    results.extend(self.grid[cell])
+        return results
+
 class ClashBattleSimulator:
     def __init__(self, state: ClashGameState):
         self.state = state
+        self.spatial_grid = SpatialGrid(cell_size=10.0)
+
+    def rebuild_spatial_grid(self):
+        """Rebuilds spatial grid index for active troops."""
+        self.spatial_grid.clear()
+        for t in self.state.troops:
+            if t.hp > 0:
+                self.spatial_grid.insert(t)
 
     def execute_round(self, red_order: Dict[str, Any], blue_order: Dict[str, Any], round_delta_seconds: float = 1.0):
         if self.state.status != "running":
@@ -39,7 +78,9 @@ class ClashBattleSimulator:
         self._resolve_elixir(round_delta_seconds)
         self._resolve_card_play("red", red_order)
         self._resolve_card_play("blue", blue_order)
+        self.rebuild_spatial_grid()
         self._resolve_movement(round_delta_seconds)
+        self.rebuild_spatial_grid()
         self._resolve_tower_attacks()
         self._resolve_combat()
         self._check_match_conclusion()
@@ -206,11 +247,12 @@ class ClashBattleSimulator:
             is_king = (target_tower == opp_towers["king"])
             t_radius = KING_TOWER_RADIUS if is_king else PRINCESS_TOWER_RADIUS
 
-            # Check if an enemy troop is right in front of us in our lane
+            # Check if an enemy troop is right in front of us in our lane (O(1) Spatial Hash Grid)
             enemy_ahead = False
             if t.target_type != "buildings":
-                for other in self.state.troops:
-                    if other.team == opp_team and other.lane == t.lane:
+                nearby = self.spatial_grid.query_nearby(t.x, t.y, t.range)
+                for other in nearby:
+                    if other.team == opp_team and other.lane == t.lane and other.hp > 0:
                         dist = math.hypot(other.x - t.x, other.y - t.y)
                         if dist <= t.range:
                             enemy_ahead = True
