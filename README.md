@@ -1,9 +1,6 @@
-# Clash Royale Autonomous 1v1 Arena
-### Senior Game Design Specification & Hackathon Systems Handbook
+# Clash Royale 1v1 Autonomous Arena
 
-An enterprise-grade, deterministic simulation framework and competitive tournament arena inspired by *Clash Royale*. In this 1.5-hour hackathon challenge, engineering teams program tactical heuristic logic and autonomous commander strategies to compete in head-to-head, real-time matches across a two-lane river battlefield.
-
-![Clash Royale Arena Overview](https://raw.githubusercontent.com/google/antigravity/main/docs/arena_mockup.png)
+A deterministic simulation framework and competitive tournament arena inspired by *Clash Royale*. Teams program tactical heuristic logic and autonomous commander strategies to compete in head-to-head matches across a two-lane river battlefield.
 
 ---
 
@@ -310,12 +307,20 @@ Each team drafts exactly 8 cards from the catalog of 10 iconic archetypes:
 
 ### 7.1 Installation & Launch
 
+#### GitHub Codespaces (In-Browser):
+1. On GitHub, click **Code** -> **Codespaces** -> **Create codespace on main**.
+2. Run the startup script in the terminal:
+   ```bash
+   ./start_codespace.sh
+   ```
+3. In the **Ports** panel, right-click port `8000` and set **Port Visibility** to **Public**, then open the link in your browser.
+
 #### Linux / macOS:
 ```bash
 # 1. Clone repository and navigate to directory
 git clone <repo-url> clash-hackathon && cd clash-hackathon
 
-# 2. Launch full arena (sets up virtualenv, installs requirements, starts server)
+# 2. Launch arena
 ./start_game.sh
 ```
 
@@ -324,7 +329,7 @@ git clone <repo-url> clash-hackathon && cd clash-hackathon
 start_game.bat
 ```
 
-The web dashboard is hosted automatically at: **`http://localhost:8000`**
+The web dashboard is hosted at: **`http://localhost:8000`**
 
 ---
 

@@ -35,23 +35,13 @@ class ClashBattleSimulator:
         self.state.players["blue"].last_taunt = blue_order.get("taunt", "")
         self.state.players["blue"].last_action = blue_order
 
-        # 1. Elixir Regeneration Step (Normal & 2x Double Elixir)
+        # Update resources and actions
         self._resolve_elixir(round_delta_seconds)
-
-        # 2. Card Deployment Step
         self._resolve_card_play("red", red_order)
         self._resolve_card_play("blue", blue_order)
-
-        # 3. Troop Marching Step (Move along lanes towards bridges and towers)
         self._resolve_movement(round_delta_seconds)
-
-        # 4. Tower Defense Attacks
         self._resolve_tower_attacks()
-
-        # 5. Troop Combat Clashes & Tower Strikes
         self._resolve_combat()
-
-        # 6. Check Crown Captures & Win Conditions
         self._check_match_conclusion()
 
     def _resolve_elixir(self, delta: float):

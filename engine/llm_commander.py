@@ -150,9 +150,7 @@ class LLMCommander:
         opp_left_dead = metrics["opp_left"] <= 0
         opp_right_dead = metrics["opp_right"] <= 0
 
-        # ==============================================================
-        # 1. EVALUATE PARTICIPANT'S CUSTOM IF-THEN TRIGGERS (TOP PRIORITY)
-        # ==============================================================
+        # Evaluate custom triggers
         parsed_triggers = getattr(skill, "parsed_triggers", [])
         for trig in parsed_triggers:
             cond = trig.get("cond", {})
@@ -244,9 +242,7 @@ class LLMCommander:
                         "taunt": skill.war_cry
                     }
 
-        # ==============================================================
-        # 2. PARTICIPANT LETHAL FINISHER (If Fireball is in deck)
-        # ==============================================================
+        # Direct tower finisher with fireball
         if "fireball" in deck and elixir >= 4.0:
             if not opp_left_dead and metrics["opp_left"] <= 380:
                 return {
@@ -271,9 +267,7 @@ class LLMCommander:
                     "taunt": "Victory is ours!"
                 }
 
-        # ==============================================================
-        # 3. DEFENSE (Only using participant's 8 cards)
-        # ==============================================================
+        # Defensive responses
         for lane in ["left", "right"]:
             incoming = metrics[f"opp_troops_{lane}"]
             if incoming:
@@ -300,9 +294,7 @@ class LLMCommander:
                                 "taunt": skill.war_cry
                             }
 
-        # ==============================================================
-        # 4. COUNTER-ATTACK OPEN FLANK (Only using participant's 8 cards)
-        # ==============================================================
+        # Flank counter-attacks
         opp_has_left = len(metrics["opp_troops_left"]) > 0
         opp_has_right = len(metrics["opp_troops_right"]) > 0
         counter_lane = None
@@ -321,9 +313,7 @@ class LLMCommander:
                         "taunt": skill.war_cry
                     }
 
-        # ==============================================================
-        # 5. MACRO PUSH / ARCHETYPE EXECUTION (Only using participant's 8 cards)
-        # ==============================================================
+        # Main push based on archetype
         target_push_lane = "right" if opp_left_dead and not opp_right_dead else ("left" if opp_right_dead and not opp_left_dead else preferred_lane)
 
         if elixir >= 7.5:
@@ -349,9 +339,7 @@ class LLMCommander:
                     "taunt": skill.war_cry
                 }
 
-        # ==============================================================
-        # 6. FAST CYCLE & ROTATION (Based on participant priorities)
-        # ==============================================================
+        # Cycle cheap cards
         if skill.archetype == "cycle" and elixir >= 4.0:
             for cheap in ["skeletons", "archers", "knight"]:
                 if cheap in deck and elixir >= CARD_CATALOG[cheap]["elixir"]:
@@ -362,9 +350,7 @@ class LLMCommander:
                         "taunt": skill.war_cry
                     }
 
-        # ==============================================================
-        # 7. ELIXIR BANKING / HOLDING
-        # ==============================================================
+        # Hold elixir
         if elixir < 4.5:
             return {
                 "card": "none",
@@ -373,9 +359,7 @@ class LLMCommander:
                 "taunt": ""
             }
 
-        # ==============================================================
-        # 8. WEIGHTED ROTATION BASED ON PARTICIPANT CARD PERCENTAGES
-        # ==============================================================
+        # Fallback weighted pick based on card priorities
         affordable = [c for c in deck if CARD_CATALOG[c]["elixir"] <= elixir]
         if affordable:
             weights = [skill.card_priorities.get(c, 1.0) for c in affordable]

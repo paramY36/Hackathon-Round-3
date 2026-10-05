@@ -1,7 +1,7 @@
 """
-1v1 Knockout Tournament Manager for AI Kingdoms Hackathon Arena.
+Knockout Tournament Manager.
 Manages single-elimination brackets, match seeding, automatic progression,
-efficiency scoring, and multi-laptop tournament export/import.
+and match scoring.
 """
 import os
 import json
@@ -47,7 +47,7 @@ class TournamentMatch:
 
 
 class TournamentManager:
-    def __init__(self, tournament_name: str = "Hackathon AI Kingdoms Championship"):
+    def __init__(self, tournament_name: str = "Arena Championship"):
         self.tournament_id = f"tourney_{uuid.uuid4().hex[:8]}"
         self.tournament_name = tournament_name
         self.matches: Dict[str, TournamentMatch] = {}

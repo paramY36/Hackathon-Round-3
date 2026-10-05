@@ -24,7 +24,6 @@ DOUBLE_ELIXIR_RATE = 1.0  # 1 elixir every 1.0s (during last 60s & overtime)
 DOUBLE_ELIXIR_THRESHOLD_SECONDS = 120.0  # Triggers at 2 minutes elapsed
 
 # Tower Stats
-# Tower Stats
 PRINCESS_TOWER_MAX_HP = 1400
 KING_TOWER_MAX_HP = 2400
 PRINCESS_TOWER_DAMAGE = 115   # Balanced from 85 to command bridge approach

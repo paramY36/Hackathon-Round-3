@@ -1,5 +1,5 @@
 """
-Graph and Minimum Spanning Tree (MST) Supply Network Engine for AI Warlords.
+Graph and Minimum Spanning Tree (MST) Supply Network Engine.
 Handles grid terrain step costs, Dijkstra shortest paths, Kruskal's MST,
 supply line connectivity, and supply disruption/attrition.
 """
