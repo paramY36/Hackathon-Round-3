@@ -473,12 +473,13 @@ function triggerScreenShake(intensity = 6) {
   const pitch = document.getElementById('clashPitch');
   if (!pitch) return;
   const originalTransform = pitch.style.transform || '';
-  const xOffset = (Math.random() - 0.5) * intensity;
-  const yOffset = (Math.random() - 0.5) * intensity;
+  const subtleAmount = Math.min(2.5, intensity * 0.25);
+  const xOffset = (Math.random() - 0.5) * subtleAmount;
+  const yOffset = (Math.random() - 0.5) * subtleAmount;
   pitch.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
   setTimeout(() => {
     pitch.style.transform = originalTransform;
-  }, 120);
+  }, 100);
 }
 
 // ==============================================================
