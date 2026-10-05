@@ -301,6 +301,22 @@ Each team drafts exactly 8 cards from the catalog of 10 iconic archetypes:
 | `fireball` | **Fireball** | 4 | Direct Spell| - | 360 | Instant| 15.0 Radius | Direct | Area spell strike (120 tower damage). Eliminates troop clusters. |
 | `goblin_barrel`| **Goblin Barrel**| 3 | Flank Spell | 100 | 60 | Instant| Tower Spawn | Surprise | Direct assault (3 goblins). Launches 3 dagger goblins onto enemy Princess Tower. |
 
+### 6.1 Card ID Quick Reference (Copy-Paste for Skill Files)
+Use these exact card IDs when building your 8-card roster in your `skills/<team>.md` file:
+
+```markdown
+- knight          # Knight (3 Elixir)
+- archers         # Archers (3 Elixir)
+- giant           # Giant (5 Elixir)
+- musketeer       # Musketeer (4 Elixir)
+- hog_rider       # Hog Rider (4 Elixir)
+- skeletons       # Skeleton Army (2 Elixir)
+- baby_dragon     # Baby Dragon (4 Elixir)
+- pekka           # P.E.K.K.A (7 Elixir)
+- fireball        # Fireball (4 Elixir)
+- goblin_barrel   # Goblin Barrel (3 Elixir)
+```
+
 ---
 
 ## 7. Participant Quick-Start & Local Testing Guide

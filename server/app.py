@@ -12,7 +12,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from engine.config import DEFAULT_MATCH_DURATION_SECONDS, DEFAULT_MODEL, OLLAMA_BASE_URL
+from engine.config import DEFAULT_MATCH_DURATION_SECONDS, DEFAULT_MODEL, OLLAMA_BASE_URL, CARD_CATALOG
 from engine.skill_loader import (
     list_available_kingdom_skills, load_kingdom_skill_file,
     validate_kingdom_skill_content, parse_kingdom_skill
@@ -79,6 +79,10 @@ class TournamentImportRequest(BaseModel):
 
 
 # REST Endpoints
+@app.get("/api/cards")
+def get_cards():
+    return CARD_CATALOG
+
 @app.get("/api/skills")
 def get_skills():
     return list_available_kingdom_skills("skills")

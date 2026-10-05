@@ -26,7 +26,7 @@ from engine.tournament_manager import TournamentManager
 from engine.skill_loader import load_kingdom_skill_file, list_available_kingdom_skills, validate_kingdom_skill_content
 from engine.match_orchestrator import MatchOrchestrator
 from engine.llm_commander import LLMCommander
-from server.app import get_skills, health_check, validate_skill, SkillValidateRequest
+from server.app import get_skills, health_check, validate_skill, SkillValidateRequest, get_cards
 
 class TestClashRoyaleArena(unittest.TestCase):
 
@@ -186,6 +186,12 @@ class TestClashRoyaleArena(unittest.TestCase):
     def test_10_server_api_health_and_skills(self):
         h = health_check()
         self.assertEqual(h["status"], "healthy")
+
+        cards = get_cards()
+        self.assertIsInstance(cards, dict)
+        self.assertEqual(len(cards), 10)
+        self.assertIn("hog_rider", cards)
+        self.assertIn("pekka", cards)
 
         s = get_skills()
         self.assertIsInstance(s, list)

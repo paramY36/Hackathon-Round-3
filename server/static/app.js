@@ -956,6 +956,33 @@ function switchToRules() { switchView('rules'); }
 // Cards Catalog Guide
 function renderCardsCatalog() {
   const grid = document.getElementById('cardsCatalogGrid');
+  const chipContainer = document.getElementById('quickCardChips');
+
+  if (chipContainer) {
+    chipContainer.innerHTML = '';
+    Object.keys(CARD_PROTOS).forEach(k => {
+      const c = CARD_PROTOS[k];
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'card-id-chip';
+      chip.title = `Click to copy '${k}'`;
+      chip.innerHTML = `${c.icon} <code>${k}</code>`;
+      chip.onclick = () => {
+        navigator.clipboard.writeText(k);
+        const prev = chip.innerHTML;
+        chip.innerHTML = `✓ Copied!`;
+        chip.style.borderColor = '#4ade80';
+        chip.style.color = '#4ade80';
+        setTimeout(() => {
+          chip.innerHTML = prev;
+          chip.style.borderColor = '';
+          chip.style.color = '';
+        }, 1200);
+      };
+      chipContainer.appendChild(chip);
+    });
+  }
+
   if (!grid) return;
 
   grid.innerHTML = '';
@@ -969,6 +996,9 @@ function renderCardsCatalog() {
         <span class="c-elixir">💧 ${c.elixir} Elixir</span>
       </div>
       <h3>${c.name}</h3>
+      <div class="card-id-badge" title="Click to copy card ID '${k}'" onclick="navigator.clipboard.writeText('${k}'); const prev=this.innerHTML; this.innerHTML='✓ Copied ID!'; setTimeout(()=>this.innerHTML=prev, 1200);">
+        <span>ID: <code>${k}</code></span> 📋
+      </div>
       <div class="catalog-stats">Role: ${c.type} | HP: ${c.hp} | Damage: ${c.dmg}</div>
       <p>${c.desc}</p>
     `;
