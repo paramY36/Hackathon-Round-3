@@ -261,6 +261,7 @@ async def launch_tournament_match(req: TournamentLaunchMatchRequest):
 def export_tournament():
     return orchestrator.tournament.to_dict()
 
+@app.get("/health")
 @app.get("/api/health")
 def health_check():
     return {
