@@ -545,8 +545,17 @@ function renderState(state) {
   // 2. Crown Scoreboard
   setElText('scoreRedCrowns', red.crowns || 0);
   setElText('scoreBlueCrowns', blue.crowns || 0);
-  setElText('redCrownDisplay', `👑 ${red.crowns || 0}`);
-  setElText('blueCrownDisplay', `👑 ${blue.crowns || 0}`);
+  const elRedCrown = document.getElementById('redCrownDisplay');
+  if (elRedCrown) {
+    elRedCrown.innerHTML = `<i data-lucide="crown"></i> ${red.crowns || 0}`;
+  }
+  const elBlueCrown = document.getElementById('blueCrownDisplay');
+  if (elBlueCrown) {
+    elBlueCrown.innerHTML = `<i data-lucide="crown"></i> ${blue.crowns || 0}`;
+  }
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 
   // 3. Double Elixir Banner Pill
   const elDoublePill = document.getElementById('doubleElixirBadge');
@@ -946,6 +955,10 @@ function switchView(viewName) {
   }
   if (viewName === 'bracket') fetchTournamentState();
   if (viewName === 'rules') renderCardsCatalog();
+
+  if (window.lucide) {
+    setTimeout(() => lucide.createIcons(), 20);
+  }
 }
 
 function switchToArena() { switchView('arena'); }
@@ -996,14 +1009,18 @@ function renderCardsCatalog() {
         <span class="c-elixir">💧 ${c.elixir} Elixir</span>
       </div>
       <h3>${c.name}</h3>
-      <div class="card-id-badge" title="Click to copy card ID '${k}'" onclick="navigator.clipboard.writeText('${k}'); const prev=this.innerHTML; this.innerHTML='✓ Copied ID!'; setTimeout(()=>this.innerHTML=prev, 1200);">
-        <span>ID: <code>${k}</code></span> 📋
+      <div class="card-id-badge" title="Click to copy card ID '${k}'" onclick="navigator.clipboard.writeText('${k}'); const prev=this.innerHTML; this.innerHTML='<i data-lucide=&quot;check&quot;></i> Copied!'; if(window.lucide)lucide.createIcons(); setTimeout(()=>{this.innerHTML=prev; if(window.lucide)lucide.createIcons();}, 1200);">
+        <i data-lucide="clipboard"></i> <span>ID: <code>${k}</code></span>
       </div>
       <div class="catalog-stats">Role: ${c.type} | HP: ${c.hp} | Damage: ${c.dmg}</div>
       <p>${c.desc}</p>
     `;
     grid.appendChild(cardEl);
   });
+
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 }
 
 // Tournament Bracket Controls
@@ -1473,7 +1490,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (btnSound) {
     btnSound.addEventListener('click', () => {
       soundEnabled = !soundEnabled;
-      btnSound.textContent = soundEnabled ? '🔊' : '🔇';
+      btnSound.innerHTML = `<i data-lucide="${soundEnabled ? 'volume-2' : 'volume-x'}"></i>`;
+      if (window.lucide) lucide.createIcons();
     });
   }
 
@@ -1537,5 +1555,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   } catch (e) {
     console.log('Initial state load: ' + e);
+  }
+
+  if (window.lucide) {
+    lucide.createIcons();
   }
 });

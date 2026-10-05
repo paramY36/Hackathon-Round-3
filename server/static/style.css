@@ -37,6 +37,68 @@
   padding: 0;
 }
 
+.lucide {
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.15em;
+  display: inline-block;
+  stroke-width: 2.2px;
+}
+
+.brand-crown-icon.lucide {
+  width: 22px;
+  height: 22px;
+  color: var(--gold-accent);
+}
+
+.timer-icon.lucide {
+  width: 14px;
+  height: 14px;
+  color: #94a3b8;
+}
+
+.drop-icon.lucide, .drop-icon .lucide {
+  width: 26px;
+  height: 26px;
+  color: #64748b;
+}
+
+.pill-crest.lucide, .pill-crest .lucide {
+  width: 18px;
+  height: 18px;
+  color: var(--gold-accent);
+}
+
+.crown-badge .lucide {
+  width: 15px;
+  height: 15px;
+  color: var(--gold-accent);
+  margin-right: 4px;
+}
+
+.modal-crest .lucide {
+  width: 52px;
+  height: 52px;
+  color: var(--gold-accent);
+}
+
+.modal-close-btn .lucide {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-tab .lucide {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+}
+
+.btn-primary .lucide, .btn-secondary .lucide, .btn-danger .lucide {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
+
 body.clash-dark {
   background: var(--bg-deep) radial-gradient(circle at 50% 0%, #151d2f 0%, #080b12 75%);
   color: #f1f5f9;

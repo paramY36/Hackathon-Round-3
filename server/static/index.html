@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/lucide.min.js"></script>
 </head>
 <body class="clash-dark">
 
@@ -15,7 +16,7 @@
   <header class="command-bar">
     <div class="brand">
       <div class="brand-crest-wrapper">
-        <span class="brand-crown-icon">👑</span>
+        <i data-lucide="crown" class="brand-crown-icon"></i>
       </div>
       <div class="brand-text">
         <span class="brand-title">CLASH ROYALE ARENA</span>
@@ -25,17 +26,17 @@
 
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
-      <button class="nav-tab active" id="btnViewLobby">⚔️ MATCH SETUP</button>
-      <button class="nav-tab" id="btnViewArena">🏟️ BATTLE ARENA</button>
-      <button class="nav-tab" id="btnViewBracket">🏆 TOURNAMENT BRACKET</button>
-      <button class="nav-tab" id="btnViewRules">📖 CARDS & CODEX</button>
+      <button class="nav-tab active" id="btnViewLobby"><i data-lucide="swords"></i> MATCH SETUP</button>
+      <button class="nav-tab" id="btnViewArena"><i data-lucide="shield"></i> BATTLE ARENA</button>
+      <button class="nav-tab" id="btnViewBracket"><i data-lucide="trophy"></i> TOURNAMENT BRACKET</button>
+      <button class="nav-tab" id="btnViewRules"><i data-lucide="book-open"></i> CARDS & CODEX</button>
     </nav>
 
     <!-- Match Core (Status, Clock, Crowns) -->
     <div class="match-core-cluster">
       <div class="match-status-badge" id="matchStatusBadge">STANDBY</div>
       <div class="timer-box">
-        <span class="timer-icon">⏳</span>
+        <i data-lucide="timer" class="timer-icon"></i>
         <span class="timer-digits" id="matchTimer">03:00</span>
       </div>
       <div class="crown-score-badge" id="crownScoreBadge">
@@ -53,13 +54,13 @@
         <button class="speed-btn" data-speed="4.0">4x</button>
       </div>
 
-      <button id="btnStart" class="btn-primary glow-green">▶ START</button>
-      <button id="btnPause" class="btn-secondary" disabled>⏸ PAUSE</button>
-      <button id="btnStep" class="btn-secondary" title="Advance 1 Tick">⏭ STEP</button>
-      <button id="btnReset" class="btn-danger" title="Reset Match">↺ RESET</button>
+      <button id="btnStart" class="btn-primary glow-green"><i data-lucide="play"></i> START</button>
+      <button id="btnPause" class="btn-secondary" disabled><i data-lucide="pause"></i> PAUSE</button>
+      <button id="btnStep" class="btn-secondary" title="Advance 1 Tick"><i data-lucide="step-forward"></i> STEP</button>
+      <button id="btnReset" class="btn-danger" title="Reset Match"><i data-lucide="rotate-ccw"></i> RESET</button>
       
       <div class="audio-control-group">
-        <button id="btnSound" class="btn-icon" title="Toggle Sound">🔊</button>
+        <button id="btnSound" class="btn-icon" title="Toggle Sound"><i data-lucide="volume-2" id="soundIcon"></i></button>
         <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.75" class="vol-slider" title="Master Volume">
       </div>
     </div>
@@ -91,7 +92,7 @@
           <div class="file-dropzone red-drop" id="dropzoneRed" title="Upload Custom Deck Dossier">
             <input type="file" id="fileInputRed" accept=".md,.txt" class="file-input-hidden">
             <div class="dropzone-body">
-              <span class="drop-icon">📄</span>
+              <span class="drop-icon"><i data-lucide="file-text"></i></span>
               <div class="drop-text">
                 <strong>Upload Red Strategy Dossier</strong>
                 <small>Drop custom .md or .txt deck file</small>
@@ -101,7 +102,7 @@
 
           <!-- Active Profile Pill -->
           <div class="profile-pill" id="pillRedSkill">
-            <div class="pill-crest">👑</div>
+            <div class="pill-crest"><i data-lucide="crown"></i></div>
             <div class="pill-text">
               <strong id="pillRedName">Hog Rider 2.6 Cycle</strong>
               <small id="pillRedSub">The Hog Master • HOG CYCLE</small>
@@ -127,7 +128,7 @@
           <div class="vs-emblem">VS</div>
           
           <div class="timer-picker">
-            <label>⏱️ Regulation Time:</label>
+            <label><i data-lucide="clock"></i> Regulation Time:</label>
             <select id="selectTimer">
               <option value="120">2 Minutes (Rapid Blitz)</option>
               <option value="180" selected>3 Minutes (Championship Standard)</option>
@@ -136,13 +137,13 @@
           </div>
 
           <button id="btnLockAndStart" class="btn-lock-start glow-gold">
-            ⚔️ COMMENCE BATTLE ▶
+            <i data-lucide="swords"></i> COMMENCE BATTLE <i data-lucide="play"></i>
           </button>
           
           <div class="center-rules-card">
-            <div class="rule-line"><span>👑</span> King Tower Fall = Instant 3-Crown KO</div>
-            <div class="rule-line"><span>⚡</span> Double Elixir in final 60 seconds</div>
-            <div class="rule-line"><span>⏳</span> Sudden Death Overtime if tied</div>
+            <div class="rule-line"><i data-lucide="crown"></i> King Tower Fall = Instant 3-Crown KO</div>
+            <div class="rule-line"><i data-lucide="zap"></i> Double Elixir in final 60 seconds</div>
+            <div class="rule-line"><i data-lucide="hourglass"></i> Sudden Death Overtime if tied</div>
           </div>
         </div>
 
@@ -157,7 +158,7 @@
           <div class="file-dropzone blue-drop" id="dropzoneBlue" title="Upload Custom Deck Dossier">
             <input type="file" id="fileInputBlue" accept=".md,.txt" class="file-input-hidden">
             <div class="dropzone-body">
-              <span class="drop-icon">📄</span>
+              <span class="drop-icon"><i data-lucide="file-text"></i></span>
               <div class="drop-text">
                 <strong>Upload Blue Strategy Dossier</strong>
                 <small>Drop custom .md or .txt deck file</small>
@@ -167,7 +168,7 @@
 
           <!-- Active Profile Pill -->
           <div class="profile-pill" id="pillBlueSkill">
-            <div class="pill-crest">👑</div>
+            <div class="pill-crest"><i data-lucide="crown"></i></div>
             <div class="pill-text">
               <strong id="pillBlueName">Giant Beatdown Heavy</strong>
               <small id="pillBlueSub">Mountain King • BEATDOWN</small>
@@ -193,7 +194,7 @@
       <!-- TACTICAL DECK FORGE -->
       <div class="quick-creator-card">
         <div class="creator-header">
-          <h3>⚔️ TACTICAL DECK FORGE // RAPID STRATEGY CREATOR</h3>
+          <h3><i data-lucide="hammer"></i> TACTICAL DECK FORGE // RAPID STRATEGY CREATOR</h3>
           <p>Assemble a custom combat doctrine and immediately deploy it into the tournament roster.</p>
         </div>
         <div class="creator-form">
@@ -224,7 +225,7 @@
             </select>
           </div>
           <button id="btnBuildSkill" class="btn-build-skill">
-            ⚡ Forge & Register Deck
+            <i data-lucide="sparkles"></i> Forge & Register Deck
           </button>
         </div>
         <div id="builderStatusMsg" class="builder-status-msg"></div>
@@ -247,14 +248,14 @@
             <h2 id="redName">Red Kingdom</h2>
             <span id="redAuthor">The Hog Master</span>
           </div>
-          <div class="crown-badge red-crowns" id="redCrownDisplay">👑 0</div>
+          <div class="crown-badge red-crowns" id="redCrownDisplay"><i data-lucide="crown"></i> 0</div>
         </div>
 
         <!-- Elixir Bar Gauge -->
         <div class="elixir-box">
           <div class="elixir-header">
             <span class="elixir-title-tag">
-              <span class="elixir-gem">💧</span> ELIXIR
+              <span class="elixir-gem"><i data-lucide="zap"></i></span> ELIXIR
             </span>
             <strong id="redElixirNum">5.0 / 10</strong>
           </div>
@@ -270,19 +271,19 @@
         <!-- Tower Health Bars -->
         <div class="tower-status-group">
           <div class="tower-row">
-            <span>👑 King Keep</span>
+            <span><i data-lucide="crown"></i> King Keep</span>
             <strong id="redKingHp">2400 / 2400</strong>
           </div>
           <div class="tower-track"><div class="tower-fill fill-red" id="redKingBar" style="width: 100%;"></div></div>
 
           <div class="tower-row">
-            <span>🗼 Left Princess</span>
+            <span><i data-lucide="shield"></i> Left Princess</span>
             <strong id="redLeftHp">1400 / 1400</strong>
           </div>
           <div class="tower-track"><div class="tower-fill fill-red" id="redLeftBar" style="width: 100%;"></div></div>
 
           <div class="tower-row">
-            <span>🗼 Right Princess</span>
+            <span><i data-lucide="shield"></i> Right Princess</span>
             <strong id="redRightHp">1400 / 1400</strong>
           </div>
           <div class="tower-track"><div class="tower-fill fill-red" id="redRightBar" style="width: 100%;"></div></div>
@@ -323,10 +324,10 @@
             <div class="field-cross-path blue-cross"></div>
             
             <div class="royal-crest crest-red">
-              <div class="crest-symbol">⚔️</div>
+              <div class="crest-symbol"><i data-lucide="swords"></i></div>
             </div>
             <div class="royal-crest crest-blue">
-              <div class="crest-symbol">🛡️</div>
+              <div class="crest-symbol"><i data-lucide="shield"></i></div>
             </div>
           </div>
 
@@ -335,7 +336,7 @@
             <!-- Red King Tower (Center Back) -->
             <div class="tower-entity king-tower red-tower" id="tower_red_king" style="left: 50%; top: 7%;">
               <div class="tower-hp-tag" id="tag_red_king">2400</div>
-              <div class="tower-roof-crest">👑</div>
+              <div class="tower-roof-crest"><i data-lucide="crown"></i></div>
               <div class="tower-cannon-barrel"></div>
               <div class="tower-battlement-wall"></div>
             </div>
@@ -343,14 +344,14 @@
             <!-- Red Left Princess Tower -->
             <div class="tower-entity princess-tower red-tower" id="tower_red_left" style="left: 25%; top: 22%;">
               <div class="tower-hp-tag" id="tag_red_left">1400</div>
-              <div class="tower-archer-nest">🏹</div>
+              <div class="tower-archer-nest"><i data-lucide="shield"></i></div>
               <div class="tower-parapet"></div>
             </div>
 
             <!-- Red Right Princess Tower -->
             <div class="tower-entity princess-tower red-tower" id="tower_red_right" style="left: 75%; top: 22%;">
               <div class="tower-hp-tag" id="tag_red_right">1400</div>
-              <div class="tower-archer-nest">🏹</div>
+              <div class="tower-archer-nest"><i data-lucide="shield"></i></div>
               <div class="tower-parapet"></div>
             </div>
           </div>
@@ -389,21 +390,21 @@
             <!-- Blue Left Princess Tower -->
             <div class="tower-entity princess-tower blue-tower" id="tower_blue_left" style="left: 25%; top: 78%;">
               <div class="tower-hp-tag" id="tag_blue_left">1400</div>
-              <div class="tower-archer-nest">🏹</div>
+              <div class="tower-archer-nest"><i data-lucide="shield"></i></div>
               <div class="tower-parapet"></div>
             </div>
 
             <!-- Blue Right Princess Tower -->
             <div class="tower-entity princess-tower blue-tower" id="tower_blue_right" style="left: 75%; top: 78%;">
               <div class="tower-hp-tag" id="tag_blue_right">1400</div>
-              <div class="tower-archer-nest">🏹</div>
+              <div class="tower-archer-nest"><i data-lucide="shield"></i></div>
               <div class="tower-parapet"></div>
             </div>
 
             <!-- Blue King Tower (Center Back) -->
             <div class="tower-entity king-tower blue-tower" id="tower_blue_king" style="left: 50%; top: 93%;">
               <div class="tower-hp-tag" id="tag_blue_king">2400</div>
-              <div class="tower-roof-crest">👑</div>
+              <div class="tower-roof-crest"><i data-lucide="crown"></i></div>
               <div class="tower-cannon-barrel"></div>
               <div class="tower-battlement-wall"></div>
             </div>
@@ -421,10 +422,10 @@
         <div class="clash-feed-box">
           <div class="feed-header">
             <span class="feed-dot"></span>
-            <span>🎙️ ARENA BROADCAST // CASTER PLAY-BY-PLAY</span>
+            <span><i data-lucide="radio"></i> ARENA BROADCAST // CASTER PLAY-BY-PLAY</span>
           </div>
           <div class="feed-list" id="combatFeed">
-            <div class="feed-msg init">⚔️ Clash Arena online. Select decks and commence the duel!</div>
+            <div class="feed-msg init">Clash Arena online. Select decks and commence the duel!</div>
           </div>
         </div>
 
@@ -438,14 +439,14 @@
             <h2 id="blueName">Blue Kingdom</h2>
             <span id="blueAuthor">Mountain King</span>
           </div>
-          <div class="crown-badge blue-crowns" id="blueCrownDisplay">👑 0</div>
+          <div class="crown-badge blue-crowns" id="blueCrownDisplay"><i data-lucide="crown"></i> 0</div>
         </div>
 
         <!-- Elixir Bar Gauge -->
         <div class="elixir-box">
           <div class="elixir-header">
             <span class="elixir-title-tag">
-              <span class="elixir-gem">💧</span> ELIXIR
+              <span class="elixir-gem"><i data-lucide="zap"></i></span> ELIXIR
             </span>
             <strong id="blueElixirNum">5.0 / 10</strong>
           </div>
@@ -461,19 +462,19 @@
         <!-- Tower Health Bars -->
         <div class="tower-status-group">
           <div class="tower-row">
-            <span>👑 King Keep</span>
+            <span><i data-lucide="crown"></i> King Keep</span>
             <strong id="blueKingHp">2400 / 2400</strong>
           </div>
           <div class="tower-track"><div class="tower-fill fill-blue" id="blueKingBar" style="width: 100%;"></div></div>
 
           <div class="tower-row">
-            <span>🗼 Left Princess</span>
+            <span><i data-lucide="shield"></i> Left Princess</span>
             <strong id="blueLeftHp">1400 / 1400</strong>
           </div>
           <div class="tower-track"><div class="tower-fill fill-blue" id="blueLeftBar" style="width: 100%;"></div></div>
 
           <div class="tower-row">
-            <span>🗼 Right Princess</span>
+            <span><i data-lucide="shield"></i> Right Princess</span>
             <strong id="blueRightHp">1400 / 1400</strong>
           </div>
           <div class="tower-track"><div class="tower-fill fill-blue" id="blueRightBar" style="width: 100%;"></div></div>
@@ -506,13 +507,13 @@
       <div class="bracket-header-row">
         <div class="bracket-title-box">
           <div class="headline-badge">CHAMPIONSHIP CUP</div>
-          <h2>🏆 SINGLE-ELIMINATION KNOCKOUT BRACKET</h2>
+          <h2><i data-lucide="trophy"></i> SINGLE-ELIMINATION KNOCKOUT BRACKET</h2>
           <p>Crown winner advances to next round; defeated kingdoms are eliminated.</p>
         </div>
         <div class="bracket-action-buttons">
-          <button id="btnCreateBracket" class="btn-primary">🎲 Generate 4-Team Bracket</button>
-          <button id="btnExportTourney" class="btn-secondary">📤 Export JSON (Sync Laptops)</button>
-          <button id="btnImportTourney" class="btn-secondary">📥 Import JSON</button>
+          <button id="btnCreateBracket" class="btn-primary"><i data-lucide="shuffle"></i> Generate 4-Team Bracket</button>
+          <button id="btnExportTourney" class="btn-secondary"><i data-lucide="upload"></i> Export JSON</button>
+          <button id="btnImportTourney" class="btn-secondary"><i data-lucide="download"></i> Import JSON</button>
         </div>
       </div>
 
@@ -527,13 +528,13 @@
   <section class="view-panel" id="viewRules" style="display: none;">
     <div class="rules-view-container">
       <div class="headline-badge">OFFICIAL TOURNAMENT CODEX</div>
-      <h2>📖 CARD COMPENDIUM & ARENA RULES</h2>
+      <h2><i data-lucide="book-open"></i> CARD COMPENDIUM & ARENA RULES</h2>
       <p class="rules-subtitle">Comprehensive statistics, combat traits, elixir costs, and victory conditions.</p>
 
       <!-- Card IDs Quick Reference Bar -->
       <div class="card-ids-bar">
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-          <strong style="color: #ffd700; font-size: 13.5px; letter-spacing: 0.5px;">📋 ALL 10 CARD IDS (Click to copy for your .md skill file):</strong>
+          <strong style="color: #ffd700; font-size: 13.5px; letter-spacing: 0.5px;"><i data-lucide="clipboard-list"></i> ALL 10 CARD IDS (Click to copy for your .md skill file):</strong>
           <span style="font-size: 11.5px; color: #94a3b8;">Use exact IDs in your 8-card roster</span>
         </div>
         <div class="card-ids-chip-container" id="quickCardChips">
@@ -550,8 +551,8 @@
   <!-- VICTORY / 3-CROWN KO MODAL -->
   <div class="modal-overlay" id="victoryModal">
     <div class="modal-card">
-      <button class="modal-close-btn" id="btnModalDismiss" title="Close">✕</button>
-      <div class="modal-crest" id="modalWinnerCrest">👑</div>
+      <button class="modal-close-btn" id="btnModalDismiss" title="Close"><i data-lucide="x"></i></button>
+      <div class="modal-crest" id="modalWinnerCrest"><i data-lucide="crown"></i></div>
       <h1 class="modal-title" id="modalWinnerTitle">3-CROWN KNOCKOUT!</h1>
       <p class="modal-reason" id="modalWinnerReason">Royal King Tower was demolished.</p>
       
@@ -562,8 +563,8 @@
       </div>
 
       <div class="modal-actions">
-        <button class="btn-primary" id="btnModalClose">PROCEED TO BRACKET 🏆</button>
-        <button class="btn-secondary" id="btnModalStay">INSPECT ARENA 🏟️</button>
+        <button class="btn-primary" id="btnModalClose"><i data-lucide="trophy"></i> PROCEED TO BRACKET</button>
+        <button class="btn-secondary" id="btnModalStay"><i data-lucide="eye"></i> INSPECT ARENA</button>
       </div>
     </div>
   </div>
